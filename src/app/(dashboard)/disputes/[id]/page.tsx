@@ -65,7 +65,7 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
     <div>
       {/* Back nav */}
       <motion.button
-        whileHover={{ x: -2 }} whileTap={{ scale: 0.97 }}
+        whileHover={{ opacity: 0.7 }} whileTap={{ scale: 0.97 }}
         onClick={() => router.push("/disputes")}
         className="flex items-center gap-1.5 text-[12px] font-semibold text-[#8FA3A0] hover:text-[#374151] transition-all mb-4">
         <HugeiconsIcon icon={ArrowLeft01Icon} size={14} strokeWidth={2} />
@@ -99,7 +99,7 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
               <p className="text-[10.5px] text-[#8FA3A0]">in escrow</p>
             </div>
             <motion.button
-              whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
               onClick={() => router.push(`/disputes/${dispute.id}/evidence`)}
               className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors">
               <HugeiconsIcon icon={AlertDiamondIcon} size={13} strokeWidth={1.5} />
@@ -274,7 +274,7 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
             <div className="flex items-center justify-between mb-3">
               <p className="text-[12px] font-bold text-[#111827]">Evidence Submitted</p>
               <motion.button
-                whileHover={{ x: 2 }} whileTap={{ scale: 0.96 }}
+                whileHover={{ opacity: 0.75 }} whileTap={{ scale: 0.96 }}
                 onClick={() => router.push(`/disputes/${dispute.id}/evidence`)}
                 className="text-[11px] font-semibold text-[#17B890] hover:underline flex items-center gap-0.5 transition-all">
                 Review all <HugeiconsIcon icon={ArrowRight01Icon} size={10} strokeWidth={2} />
@@ -320,7 +320,7 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
               ))}
             </div>
             <motion.button
-              whileHover={{ scale: 1.01, y: -1 }} whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
               onClick={() => router.push(`/tasks/${task.id}`)}
               className="w-full mt-3 h-7 rounded-lg border border-[#E2E8E6] text-[11.5px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
               View task →

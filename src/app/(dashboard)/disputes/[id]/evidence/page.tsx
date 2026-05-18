@@ -111,7 +111,7 @@ function FileRow({ file, active, onSelect }: {
   const tc = TYPE_COLOR[file.type] ?? { bg:"#F3F4F6", color:"#374151" }
   return (
     <motion.button
-      whileHover={{ y:-1 }} transition={{ duration:0.12 }}
+      whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={{ duration:0.1 }}
       onClick={onSelect}
       className={cn(
         "w-full flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all",

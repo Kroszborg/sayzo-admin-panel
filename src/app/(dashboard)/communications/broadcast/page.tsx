@@ -65,8 +65,9 @@ export default function BroadcastPage() {
             return (
               <motion.button
                 key={seg.id}
-                whileHover={{ y:-1 }}
-                transition={{ duration:0.12 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration:0.1 }}
                 onClick={() => s.toggleAudience(seg.id)}
                 className={cn(
                   "flex flex-col items-center gap-1.5 p-4 rounded-xl border-2 text-center transition-all",

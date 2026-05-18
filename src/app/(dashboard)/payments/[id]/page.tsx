@@ -50,7 +50,7 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
     <div>
       {/* Back */}
       <motion.button
-        whileHover={{ x: -2 }} whileTap={{ scale: 0.97 }}
+        whileHover={{ opacity: 0.7 }} whileTap={{ scale: 0.97 }}
         onClick={() => router.push("/payments")}
         className="flex items-center gap-1.5 text-[12px] font-semibold text-[#8FA3A0] hover:text-[#374151] transition-all mb-4">
         <HugeiconsIcon icon={ArrowLeft01Icon} size={14} strokeWidth={2} />

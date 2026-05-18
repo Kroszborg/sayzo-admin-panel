@@ -167,7 +167,7 @@ export default function NotificationsPage() {
         <h1 className="text-[20px] font-extrabold text-[#111827]">Notifications</h1>
         {totalUnread > 0 && (
           <motion.button
-            whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
             onClick={s.markAllRead}
             className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors">
             <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={1.5} className="text-[#17B890]" />

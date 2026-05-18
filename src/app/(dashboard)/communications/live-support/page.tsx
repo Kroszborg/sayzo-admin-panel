@@ -55,8 +55,8 @@ export default function LiveSupportPage() {
   }, [])
 
   return (
-    <div className="flex bg-white border border-[#E5E7EB] rounded-xl overflow-hidden"
-      style={{ height: "calc(100vh - 230px)" }}>
+    <div className="flex bg-white border border-[#E5E7EB] rounded-xl"
+      style={{ height: "calc(100vh - 230px)", overflow: "clip" }}>
 
       {/* ── Conversation list ── */}
       <div className="w-[300px] shrink-0 border-r border-[#E5E7EB] flex flex-col">
@@ -86,24 +86,25 @@ export default function LiveSupportPage() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.96, y: 4 }}
                   transition={{ duration: 0.14, ease: [0.33, 1, 0.68, 1] }}
-                  className="absolute right-0 top-7 z-20 w-44 bg-white border border-[#E5E7EB] rounded-xl shadow-lg overflow-hidden"
+                  className="absolute right-0 top-8 z-[9999] w-48 bg-white border border-[#E5E7EB] rounded-xl shadow-xl overflow-hidden"
                 >
                   {FILTER_OPTIONS.map((opt) => (
-                    <button
+                    <motion.button
                       key={opt.value}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => { s.setConvFilter(opt.value); setFilterOpen(false) }}
                       className={cn(
                         "w-full flex items-center justify-between px-3 py-2.5 text-[12px] font-medium text-left transition-colors",
                         s.convFilter === opt.value
                           ? "bg-[#F0FDF4] text-[#17B890] font-semibold"
-                          : "text-[#374151] hover:bg-[#F9FAFB]"
+                          : "text-[#374151] hover:bg-[#F5F8F7]"
                       )}
                     >
                       {opt.label}
                       {s.convFilter === opt.value && (
                         <HugeiconsIcon icon={Tick01Icon} size={12} strokeWidth={2.5} />
                       )}
-                    </button>
+                    </motion.button>
                   ))}
                 </motion.div>
               )}

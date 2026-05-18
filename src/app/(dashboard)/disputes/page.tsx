@@ -305,14 +305,14 @@ export default function DisputesPage() {
                       <td className="px-3 py-3">
                         <div className="flex items-center gap-1.5">
                           <motion.button
-                            whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
                             onClick={() => router.push(`/disputes/${d.id}`)}
                             className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
                             View
                           </motion.button>
                           {!d.assignedTo && !s.assignments[d.id] && (
                             <motion.button
-                              whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.95 }}
+                              whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
                               onClick={() => s.setAssignOpen(true, d.id)}
                               className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
                               Assign

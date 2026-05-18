@@ -91,7 +91,7 @@ export function AppSidebar() {
                     "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
                     on
                       ? "bg-[#E8F7F3] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8]"
-                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827] hover:translate-x-0.5"
+                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827]"
                   )}
                 >
                   <HugeiconsIcon
@@ -121,7 +121,7 @@ export function AppSidebar() {
                     "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
                     on
                       ? "bg-[#E8F7F3] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8]"
-                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827] hover:translate-x-0.5"
+                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827]"
                   )}
                 >
                   <HugeiconsIcon

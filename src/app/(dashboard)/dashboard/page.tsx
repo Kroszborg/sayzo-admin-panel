@@ -126,8 +126,9 @@ function ExportModal() {
                       return (
                         <motion.button
                           key={id}
-                          whileHover={{ y: -1 }}
-                          transition={{ duration:0.12 }}
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.98 }}
+                          transition={{ duration:0.1 }}
                           onClick={() => setReportType(id)}
                           className={cn(
                             "w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border text-left transition-all",
@@ -232,14 +233,14 @@ export default function DashboardPage() {
         </div>
         <div className="flex items-center gap-2 mt-1">
           <motion.button
-            whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
             onClick={() => setExportOpen(true)}
             className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
           >
             <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />
             Export Report
           </motion.button>
-          <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}>
+          <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}>
             <Link
               href="/live-feed"
               className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
@@ -344,7 +345,7 @@ export default function DashboardPage() {
               <span className="w-2 h-2 rounded-full bg-[#17B890]" />
               <span className="text-[13px] font-bold text-[#111827]">Live Feed</span>
             </div>
-            <motion.div whileHover={{ x: 2 }} transition={{ duration: 0.12 }}>
+            <motion.div whileHover={{ opacity: 0.75 }} transition={{ duration: 0.12 }}>
               <Link href="/live-feed"
                 className="flex items-center gap-1 text-[11.5px] font-semibold text-[#8FA3A0] hover:text-[#17B890] transition-colors">
                 View all
