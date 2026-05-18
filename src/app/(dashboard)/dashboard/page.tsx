@@ -231,20 +231,23 @@ export default function DashboardPage() {
           <p className="text-[12px] text-[#8FA3A0] mt-0.5">Friday, May 1 · 9:42 AM IST</p>
         </div>
         <div className="flex items-center gap-2 mt-1">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
             onClick={() => setExportOpen(true)}
             className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
           >
             <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />
             Export Report
-          </button>
-          <Link
-            href="/live-feed"
-            className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
-          >
-            <span className="w-2 h-2 rounded-full bg-[#17B890]" />
-            Live Feed
-          </Link>
+          </motion.button>
+          <motion.div whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}>
+            <Link
+              href="/live-feed"
+              className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#17B890]" />
+              Live Feed
+            </Link>
+          </motion.div>
         </div>
       </motion.div>
 
@@ -341,11 +344,13 @@ export default function DashboardPage() {
               <span className="w-2 h-2 rounded-full bg-[#17B890]" />
               <span className="text-[13px] font-bold text-[#111827]">Live Feed</span>
             </div>
-            <Link href="/live-feed"
-              className="flex items-center gap-1 text-[11.5px] font-semibold text-[#8FA3A0] hover:text-[#17B890] transition-colors">
-              View all
-              <HugeiconsIcon icon={ArrowRight01Icon} size={11} strokeWidth={2} />
-            </Link>
+            <motion.div whileHover={{ x: 2 }} transition={{ duration: 0.12 }}>
+              <Link href="/live-feed"
+                className="flex items-center gap-1 text-[11.5px] font-semibold text-[#8FA3A0] hover:text-[#17B890] transition-colors">
+                View all
+                <HugeiconsIcon icon={ArrowRight01Icon} size={11} strokeWidth={2} />
+              </Link>
+            </motion.div>
           </div>
 
           {/* Feed rows */}
@@ -356,7 +361,8 @@ export default function DashboardPage() {
                 initial={{ opacity:0, x:-4 }}
                 animate={{ opacity:1, x:0 }}
                 transition={{ duration:0.18, delay: i * 0.04 }}
-                className="flex items-center gap-3 px-5 py-3 border-b border-[#F9FAFB] last:border-0 hover:bg-[#FAFAFA] transition-colors cursor-default"
+                whileHover={{ x: 2, backgroundColor: "#FAFAFA" }}
+                className="flex items-center gap-3 px-5 py-3 border-b border-[#F9FAFB] last:border-0 transition-colors cursor-default"
               >
                 {/* Icon */}
                 <div

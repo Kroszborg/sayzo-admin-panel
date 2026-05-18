@@ -1,15 +1,16 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   CheckmarkCircle02Icon, Cancel01Icon, ArrowRight01Icon,
-  SmartPhone01Icon, Mail01Icon,
+  Mail01Icon,
 } from "@hugeicons/core-free-icons"
 import { useTeamStore, MODULES, COLS, ColKey } from "@/store/team-store"
 import { useAlertStore } from "@/store/alert-store"
+import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { cn } from "@/lib/utils"
 
 // ─── Validation helpers ────────────────────────────────────────────────────
@@ -23,6 +24,8 @@ export default function InvitePage() {
   const router = useRouter()
   const s      = useTeamStore()
   const alert  = useAlertStore()
+  const [sendOpen, setSendOpen]         = useState(false)
+  const [customExpiry, setCustomExpiry] = useState("")
 
   // Redirect to /team after success
   useEffect(() => {
@@ -82,9 +85,16 @@ export default function InvitePage() {
             <label className="block text-[12px] font-bold text-[#374151] mb-1.5">
               Phone Number <span className="text-[#EF4444]">*</span>
             </label>
-            <div className="relative">
-              <HugeiconsIcon icon={SmartPhone01Icon} size={14} strokeWidth={1.5}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8FA3A0]" />
+            <div className="relative flex">
+              <div className={cn(
+                "flex items-center gap-1.5 px-3 rounded-l-xl border border-r-0 text-[13px] font-semibold select-none shrink-0 h-10",
+                s.phone && !phoneValid ? "border-[#EF4444] bg-[#FEF2F2] text-[#EF4444]" :
+                s.phone && phoneValid  ? "border-[#17B890] bg-[#F0FDF4] text-[#17B890]" :
+                "border-[#E2E8E6] bg-[#F9FAFB] text-[#8FA3A0]"
+              )}>
+                <span className="text-[15px]">🇮🇳</span>
+                <span>+91</span>
+              </div>
               <input
                 type="tel"
                 value={s.phone}
@@ -92,7 +102,7 @@ export default function InvitePage() {
                 placeholder="9876543210"
                 maxLength={10}
                 className={cn(
-                  "w-full h-10 pl-9 pr-9 rounded-xl border text-[13px] text-[#374151] outline-none transition-colors",
+                  "flex-1 h-10 pl-3 pr-9 rounded-r-xl border text-[13px] text-[#374151] outline-none transition-colors",
                   s.phone && !phoneValid ? "border-[#EF4444] bg-[#FEF2F2] focus:border-[#EF4444]" :
                   s.phone && phoneValid  ? "border-[#17B890] bg-white focus:border-[#17B890]" :
                   "border-[#E2E8E6] focus:border-[#17B890]"
@@ -151,15 +161,37 @@ export default function InvitePage() {
         {/* Access expiry */}
         <div>
           <label className="block text-[12px] font-bold text-[#374151] mb-1.5">Access expires</label>
-          <select
-            value={s.expiry}
-            onChange={(e) => s.setExpiry(e.target.value)}
-            className="h-9 px-3 pr-8 rounded-xl border border-[#E2E8E6] text-[13px] text-[#374151] outline-none focus:border-[#17B890] bg-white appearance-none cursor-pointer min-w-[180px] transition-colors"
-          >
-            {["Never","7 days","30 days","90 days","Custom date"].map((o) => (
-              <option key={o}>{o}</option>
-            ))}
-          </select>
+          <div className="flex items-center gap-3 flex-wrap">
+            <select
+              value={s.expiry}
+              onChange={(e) => { s.setExpiry(e.target.value); setCustomExpiry("") }}
+              className="h-9 px-3 pr-8 rounded-xl border border-[#E2E8E6] text-[13px] text-[#374151] outline-none focus:border-[#17B890] bg-white appearance-none cursor-pointer min-w-[180px] transition-colors"
+            >
+              {["Never","7 days","30 days","90 days","Custom date"].map((o) => (
+                <option key={o}>{o}</option>
+              ))}
+            </select>
+            <AnimatePresence>
+              {s.expiry === "Custom date" && (
+                <motion.div
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -8 }}
+                  transition={{ duration: 0.16, ease: [0.33, 1, 0.68, 1] }}
+                  className="flex items-center gap-2"
+                >
+                  <span className="text-[12px] font-semibold text-[#374151]">Expires on</span>
+                  <input
+                    type="date"
+                    value={customExpiry}
+                    onChange={(e) => setCustomExpiry(e.target.value)}
+                    min={new Date().toISOString().split("T")[0]}
+                    className="h-9 px-3 rounded-xl border border-[#E2E8E6] text-[12px] text-[#374151] outline-none focus:border-[#17B890] bg-white transition-colors"
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <p className="text-[11.5px] text-[#8FA3A0] mt-1.5 max-w-lg">
             Set an expiry to automatically revoke access — useful for contractors or temporary cover.
           </p>
@@ -265,11 +297,10 @@ export default function InvitePage() {
             className="h-9 px-5 rounded-xl border border-[#E2E8E6] text-[12.5px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
             Cancel
           </button>
-          <button
-            onClick={() => {
-              s.submitInvite()
-              if (canSubmit) alert.show("success", `Invitation sent to ${s.email}`)
-            }}
+          <motion.button
+            whileHover={canSubmit && !s.submitting ? { scale: 1.02 } : {}}
+            whileTap={canSubmit && !s.submitting ? { scale: 0.97 } : {}}
+            onClick={() => { if (canSubmit) setSendOpen(true) }}
             disabled={!canSubmit}
             className={cn(
               "h-9 px-5 rounded-xl text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-all",
@@ -282,9 +313,22 @@ export default function InvitePage() {
           >
             <HugeiconsIcon icon={ArrowRight01Icon} size={14} strokeWidth={2} />
             {s.submitting ? "Sending…" : "Send invitation"}
-          </button>
+          </motion.button>
         </div>
       </motion.div>
+
+      <ConfirmDialog
+        open={sendOpen}
+        onOpenChange={setSendOpen}
+        title="Send invitation?"
+        description={`An invite link will be sent to ${s.email}. They will have access based on the permissions you configured. The link expires in 7 days.`}
+        confirmLabel="Yes, send invitation"
+        onConfirm={() => {
+          s.submitInvite()
+          alert.show("success", `Invitation sent to ${s.email}`)
+          setSendOpen(false)
+        }}
+      />
     </div>
   )
 }

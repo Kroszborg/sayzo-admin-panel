@@ -186,7 +186,9 @@ export default function DisputesPage() {
         {TABS.map((t) => {
           const active = s.activeTab === t.value
           return (
-            <button key={t.value} onClick={() => s.setActiveTab(t.value)}
+            <motion.button key={t.value}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => s.setActiveTab(t.value)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 active ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
@@ -194,7 +196,7 @@ export default function DisputesPage() {
               <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded",
                 active ? "bg-[#111827] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]"
               )}>{t.count}</span>
-            </button>
+            </motion.button>
           )
         })}
       </motion.div>
@@ -293,16 +295,28 @@ export default function DisputesPage() {
                         {d.sla.split(" · ")[1] && <p className="text-[10px] text-[#8FA3A0]">{d.sla.split(" · ")[1]}</p>}
                       </td>
                       <td className="px-3 py-3 text-[12px] text-[#374151]">
-                        {d.assignedTo ?? <span className="text-[#D1D5DB] italic text-[11px]">Not assigned</span>}
+                        {(() => {
+                          const aid = s.assignments[d.id]
+                          const name = aid ? (MOCK_TEAM.find((m) => m.id === aid)?.name ?? d.assignedTo) : d.assignedTo
+                          return name ?? <span className="text-[#D1D5DB] italic text-[11px]">Not assigned</span>
+                        })()}
                       </td>
                       <td className="px-3 py-3 text-[11.5px] text-[#8FA3A0]">{d.filedAt}</td>
                       <td className="px-3 py-3">
                         <div className="flex items-center gap-1.5">
-                          <button onClick={() => router.push(`/disputes/${d.id}`)}
-                            className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">View</button>
-                          {!d.assignedTo && (
-                            <button onClick={() => s.setAssignOpen(true, d.id)}
-                              className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">Assign</button>
+                          <motion.button
+                            whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.95 }}
+                            onClick={() => router.push(`/disputes/${d.id}`)}
+                            className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
+                            View
+                          </motion.button>
+                          {!d.assignedTo && !s.assignments[d.id] && (
+                            <motion.button
+                              whileHover={{ scale: 1.04, y: -1 }} whileTap={{ scale: 0.95 }}
+                              onClick={() => s.setAssignOpen(true, d.id)}
+                              className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
+                              Assign
+                            </motion.button>
                           )}
                         </div>
                       </td>

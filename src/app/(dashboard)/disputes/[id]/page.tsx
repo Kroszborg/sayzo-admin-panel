@@ -1,15 +1,17 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   ArrowLeft01Icon, CheckmarkCircle02Icon, AlertDiamondIcon,
   Clock01Icon, Download01Icon, ArrowRight01Icon,
 } from "@hugeicons/core-free-icons"
 import { useDisputesStore } from "@/store/disputes-store"
-import { MOCK_DISPUTES, MOCK_TASKS } from "@/lib/mock-data"
+import { MOCK_DISPUTES, MOCK_TASKS, MOCK_TEAM } from "@/lib/mock-data"
 import { useAlertStore } from "@/store/alert-store"
+import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { cn } from "@/lib/utils"
 
 // ─── Timeline data ─────────────────────────────────────────────────────────
@@ -35,9 +37,16 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
   const router = useRouter()
   const s      = useDisputesStore()
   const alert  = useAlertStore()
+  const [resolveOpen, setResolveOpen] = useState(false)
 
   const dispute = MOCK_DISPUTES.find((d) => d.id === params.id) ?? MOCK_DISPUTES[0]
   const task    = MOCK_TASKS.find((t) => t.id === dispute.taskId) ?? MOCK_TASKS[0]
+
+  const isResolved  = s.resolvedCases.has(dispute.id)
+  const assignedId  = s.assignments[dispute.id]
+  const assignedName = assignedId
+    ? (MOCK_TEAM.find((m) => m.id === assignedId)?.name ?? dispute.assignedTo)
+    : dispute.assignedTo
 
   const STATUS_STYLE: Record<string, string> = {
     "Unassigned":        "bg-[#FEF3C7] text-[#D97706]",
@@ -55,11 +64,13 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
   return (
     <div>
       {/* Back nav */}
-      <button onClick={() => router.push("/disputes")}
-        className="flex items-center gap-1.5 text-[12px] font-semibold text-[#8FA3A0] hover:text-[#374151] transition-colors mb-4">
+      <motion.button
+        whileHover={{ x: -2 }} whileTap={{ scale: 0.97 }}
+        onClick={() => router.push("/disputes")}
+        className="flex items-center gap-1.5 text-[12px] font-semibold text-[#8FA3A0] hover:text-[#374151] transition-all mb-4">
         <HugeiconsIcon icon={ArrowLeft01Icon} size={14} strokeWidth={2} />
         Back to Disputes
-      </button>
+      </motion.button>
 
       {/* Header */}
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.22 }}
@@ -68,8 +79,8 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
           <div className="flex-1 min-w-0 mr-4">
             <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
               <h1 className="text-[18px] font-extrabold text-[#111827]">{dispute.title}</h1>
-              <span className={cn("text-[11px] font-bold px-2.5 py-0.5 rounded-full", STATUS_STYLE[dispute.status] ?? "bg-[#F3F4F6] text-[#6B7280]")}>
-                {dispute.status}
+              <span className={cn("text-[11px] font-bold px-2.5 py-0.5 rounded-full", STATUS_STYLE[isResolved ? "Resolved" : dispute.status] ?? "bg-[#F3F4F6] text-[#6B7280]")}>
+                {isResolved ? "Resolved" : dispute.status}
               </span>
               <span className={cn("text-[11px] font-bold px-2.5 py-0.5 rounded-full", PRI_STYLE[dispute.priority] ?? "bg-[#F3F4F6] text-[#6B7280]")}>
                 {dispute.priority}
@@ -87,11 +98,13 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
               <p className="text-[20px] font-extrabold text-[#DC2626]">₹{dispute.amount.toLocaleString("en-IN")}</p>
               <p className="text-[10.5px] text-[#8FA3A0]">in escrow</p>
             </div>
-            <button onClick={() => router.push(`/disputes/${dispute.id}/evidence`)}
-              className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7]">
+            <motion.button
+              whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
+              onClick={() => router.push(`/disputes/${dispute.id}/evidence`)}
+              className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors">
               <HugeiconsIcon icon={AlertDiamondIcon} size={13} strokeWidth={1.5} />
               View evidence
-            </button>
+            </motion.button>
           </div>
         </div>
       </motion.div>
@@ -215,7 +228,7 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
               {[
                 { k:"First response due",  v:"23h 47m",        red:false },
                 { k:"Resolution due",       v:"6d 23h",         red:false },
-                { k:"Assigned to",          v:dispute.assignedTo ?? "Unassigned", red:!dispute.assignedTo },
+                { k:"Assigned to",          v:assignedName ?? "Unassigned", red:!assignedName },
                 { k:"Filed",               v:dispute.filedAt,   red:false },
               ].map(({ k, v, red }) => (
                 <div key={k} className="flex items-center justify-between">
@@ -228,22 +241,44 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
               ))}
             </div>
             <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => alert.show("success", `Case ${dispute.id} marked as resolved`)}
-                className="flex-1 h-8 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[11.5px] font-bold transition-colors">
-                Resolve case
-              </button>
+              {isResolved ? (
+                <div className="flex-1 h-8 rounded-lg bg-[#DCFCE7] flex items-center justify-center gap-1.5 text-[11.5px] font-bold text-[#16A34A]">
+                  <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={2.5} />
+                  Resolved
+                </div>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                  onClick={() => setResolveOpen(true)}
+                  className="flex-1 h-8 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[11.5px] font-bold transition-colors">
+                  Resolve case
+                </motion.button>
+              )}
             </div>
+            <ConfirmDialog
+              open={resolveOpen}
+              onOpenChange={setResolveOpen}
+              title="Resolve this case?"
+              description={`Case ${dispute.id} will be marked as resolved. This will close the escrow decision and notify both parties.`}
+              confirmLabel="Yes, resolve case"
+              onConfirm={() => {
+                s.resolveCase(dispute.id)
+                alert.show("success", `Case ${dispute.id} marked as resolved`)
+                setResolveOpen(false)
+              }}
+            />
           </div>
 
           {/* Evidence submitted */}
           <div className="bg-white border border-[#E5E7EB] rounded-xl p-4">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[12px] font-bold text-[#111827]">Evidence Submitted</p>
-              <button onClick={() => router.push(`/disputes/${dispute.id}/evidence`)}
-                className="text-[11px] font-semibold text-[#17B890] hover:underline flex items-center gap-0.5">
+              <motion.button
+                whileHover={{ x: 2 }} whileTap={{ scale: 0.96 }}
+                onClick={() => router.push(`/disputes/${dispute.id}/evidence`)}
+                className="text-[11px] font-semibold text-[#17B890] hover:underline flex items-center gap-0.5 transition-all">
                 Review all <HugeiconsIcon icon={ArrowRight01Icon} size={10} strokeWidth={2} />
-              </button>
+              </motion.button>
             </div>
             {[
               { label:"From Giver", files:EVIDENCE_FILES_GIVER, color:"#9333EA" },
@@ -284,10 +319,12 @@ export default function DisputeDetailPage({ params }: { params: { id: string } }
                 </div>
               ))}
             </div>
-            <button onClick={() => router.push(`/tasks/${task.id}`)}
+            <motion.button
+              whileHover={{ scale: 1.01, y: -1 }} whileTap={{ scale: 0.97 }}
+              onClick={() => router.push(`/tasks/${task.id}`)}
               className="w-full mt-3 h-7 rounded-lg border border-[#E2E8E6] text-[11.5px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
               View task →
-            </button>
+            </motion.button>
           </div>
         </div>
       </motion.div>

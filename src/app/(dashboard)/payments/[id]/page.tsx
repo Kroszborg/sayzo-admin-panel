@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -9,6 +10,7 @@ import {
 } from "@hugeicons/core-free-icons"
 import { MOCK_PAYMENTS, MOCK_TASKS } from "@/lib/mock-data"
 import { useAlertStore } from "@/store/alert-store"
+import { ConfirmDialog } from "@/components/shared/confirm-dialog"
 import { cn } from "@/lib/utils"
 
 // ─── Timeline ──────────────────────────────────────────────────────────────
@@ -29,10 +31,12 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
   const alert   = useAlertStore()
   const payment = MOCK_PAYMENTS.find((p) => p.id === params.id) ?? MOCK_PAYMENTS[0]
   const task    = MOCK_TASKS.find((t) => t.id === payment.taskId) ?? MOCK_TASKS[0]
+  const [releaseOpen, setReleaseOpen] = useState(false)
+  const [released, setReleased]       = useState(false)
 
   const doerPct  = 88
   const feePct   = 12
-  const isReleased = payment.status === "Released"
+  const isReleased = payment.status === "Released" || released
 
   const STATUS_STYLE: Record<string, string> = {
     "Released":  "bg-[#DCFCE7] text-[#16A34A]",
@@ -45,11 +49,13 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
   return (
     <div>
       {/* Back */}
-      <button onClick={() => router.push("/payments")}
-        className="flex items-center gap-1.5 text-[12px] font-semibold text-[#8FA3A0] hover:text-[#374151] transition-colors mb-4">
+      <motion.button
+        whileHover={{ x: -2 }} whileTap={{ scale: 0.97 }}
+        onClick={() => router.push("/payments")}
+        className="flex items-center gap-1.5 text-[12px] font-semibold text-[#8FA3A0] hover:text-[#374151] transition-all mb-4">
         <HugeiconsIcon icon={ArrowLeft01Icon} size={14} strokeWidth={2} />
         Back to Payments
-      </button>
+      </motion.button>
 
       {/* Header */}
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.22 }}
@@ -81,11 +87,13 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
             <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />
             Export receipt
           </button>
-          <button onClick={() => router.push(`/tasks/${task.id}`)}
+          <motion.button
+            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+            onClick={() => router.push(`/tasks/${task.id}`)}
             className="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[12px] font-bold transition-colors">
             View linked task
             <HugeiconsIcon icon={ArrowRight01Icon} size={13} strokeWidth={2} />
-          </button>
+          </motion.button>
         </div>
       </motion.div>
 
@@ -264,15 +272,22 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
                 </div>
               ))}
             </div>
-            {payment.status === "In Escrow" && (
-              <button
-                onClick={() => alert.show("success", `₹${payment.doerEarns.toLocaleString("en-IN")} release initiated to ${payment.doer}`)}
+            {payment.status === "In Escrow" && !released && (
+              <motion.button
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
+                onClick={() => setReleaseOpen(true)}
                 className="w-full mt-4 h-8 rounded-lg bg-[#17B890] hover:opacity-90 text-white text-[12px] font-bold flex items-center justify-center gap-1.5 transition-opacity">
                 <HugeiconsIcon icon={CreditCardIcon} size={13} strokeWidth={2} />
                 Release funds manually
-              </button>
+              </motion.button>
             )}
-            {isReleased && (
+            {released && (
+              <div className="mt-4 flex items-center gap-1.5 text-[11.5px] text-[#17B890] font-semibold">
+                <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={2} />
+                Funds released manually
+              </div>
+            )}
+            {isReleased && !released && (
               <div className="mt-3 flex items-center gap-1.5 text-[11.5px] text-[#17B890] font-semibold">
                 <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={2} />
                 Auto-released · 72h review window
@@ -281,6 +296,19 @@ export default function PaymentDetailPage({ params }: { params: { id: string } }
           </div>
         </div>
       </motion.div>
+
+      <ConfirmDialog
+        open={releaseOpen}
+        onOpenChange={setReleaseOpen}
+        title="Release funds manually?"
+        description={`₹${payment.doerEarns.toLocaleString("en-IN")} will be released to ${payment.doer}. This action cannot be undone.`}
+        confirmLabel="Yes, release funds"
+        onConfirm={() => {
+          setReleased(true)
+          alert.show("success", `₹${payment.doerEarns.toLocaleString("en-IN")} release initiated to ${payment.doer}`)
+          setReleaseOpen(false)
+        }}
+      />
     </div>
   )
 }

@@ -293,6 +293,73 @@
 [data-theme='dark'] ::-webkit-scrollbar-thumb { background: var(--dm-border); border-radius: 3px; }
 [data-theme='dark'] ::-webkit-scrollbar-thumb:hover { background: var(--dm-border-2); }
 
+/* ── Alert Dialog ────────────────────────────────────────────── */
+[data-theme='dark'] [data-slot='alert-dialog-content'] {
+  background-color: var(--dm-surface) !important;
+  border-color:     var(--dm-border) !important;
+  color:            var(--dm-text-1) !important;
+}
+[data-theme='dark'] [data-slot='alert-dialog-overlay'] {
+  background-color: rgba(0,0,0,0.75) !important;
+}
+[data-theme='dark'] [data-slot='alert-dialog-title'] { color: var(--dm-text-1) !important; }
+[data-theme='dark'] [data-slot='alert-dialog-description'] { color: var(--dm-text-2) !important; }
+
+/* ── Popovers / Dropdowns (Radix) ────────────────────────────── */
+[data-theme='dark'] [data-radix-popper-content-wrapper] > * {
+  background-color: var(--dm-elevated) !important;
+  border-color:     var(--dm-border) !important;
+  color:            var(--dm-text-1) !important;
+}
+[data-theme='dark'] [data-slot='popover-content'],
+[data-theme='dark'] [data-slot='dropdown-menu-content'],
+[data-theme='dark'] [data-slot='select-content'],
+[data-theme='dark'] [data-slot='combobox-content'] {
+  background-color: var(--dm-elevated) !important;
+  border-color:     var(--dm-border) !important;
+  color:            var(--dm-text-1) !important;
+}
+[data-theme='dark'] [role='option'],
+[data-theme='dark'] [role='menuitem'] {
+  color: var(--dm-text-1) !important;
+}
+[data-theme='dark'] [role='option']:hover,
+[data-theme='dark'] [role='menuitem']:hover,
+[data-theme='dark'] [data-highlighted] {
+  background-color: var(--dm-border) !important;
+}
+
+/* ── Chat bubble exception: agent bubbles stay dark in dark mode ─ */
+[data-theme='dark'] .chat-bubble-agent {
+  background-color: #1C2A26 !important;
+  color:            #E8E8E8 !important;
+}
+
+/* ── Dark-inverted buttons: child text/icons stay correct color ── */
+[data-theme='dark'] .bg-\[\#111827\] span,
+[data-theme='dark'] .bg-\[\#111827\] p {
+  color: inherit !important;
+}
+
+/* ── Confirm/modal footer buttons in dark mode ───────────────── */
+[data-theme='dark'] .bg-\[\#DC2626\] { background-color: #991B1B !important; }
+[data-theme='dark'] .hover\:bg-\[\#B91C1C\]:hover { background-color: #7F1D1D !important; }
+
+/* ── Table header (dark bg stays dark) ──────────────────────── */
+[data-theme='dark'] .bg-\[\#111827\].text-white {
+  background-color: #1C1C22 !important;
+  color:            var(--dm-text-1) !important;
+}
+
+/* ── Green action buttons stay green ────────────────────────── */
+[data-theme='dark'] .bg-\[\#17B890\] { background-color: #0F9B78 !important; }
+[data-theme='dark'] .hover\:opacity-90:hover { opacity: 0.85 !important; }
+
+/* ── Resolved state pill ─────────────────────────────────────── */
+[data-theme='dark'] .bg-\[\#DCFCE7\] { background-color: var(--dm-success-bg) !important; }
+[data-theme='dark'] .text-\[\#16A34A\] { color: #4ADE80 !important; }
+[data-theme='dark'] .text-\[\#17B890\] { color: #2DD4BF !important; }
+
 /* ── Module Home page ────────────────────────────────────────── */
 /* Keep cloud background on modules/auth pages as-is — they look fine */
 

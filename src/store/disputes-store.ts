@@ -43,6 +43,13 @@ interface DisputesStore {
   setResolver:      (id: string | null) => void
   confirmAssign:    () => void
 
+  // Assignments: caseId → team member id
+  assignments: Record<string, string>
+
+  // Resolved cases
+  resolvedCases: Set<string>
+  resolveCase:   (id: string) => void
+
   // Detail — notes
   notes:    InternalNote[]
   newNote:  string
@@ -89,7 +96,21 @@ export const useDisputesStore = create<DisputesStore>((set, get) => ({
   setAssignOpen: (v, caseId) => set({ assignOpen:v, assignCaseId:caseId ?? "", assignSearch:"", selectedResolver:null }),
   setAssignSearch: (v) => set({ assignSearch:v }),
   setResolver:     (id) => set({ selectedResolver:id }),
-  confirmAssign:   () => set({ assignOpen:false }),
+  confirmAssign:   () => set((s) => ({
+    assignOpen: false,
+    assignments: s.selectedResolver
+      ? { ...s.assignments, [s.assignCaseId]: s.selectedResolver }
+      : s.assignments,
+  })),
+
+  assignments: {},
+
+  resolvedCases: new Set<string>(),
+  resolveCase: (id) => set((s) => {
+    const n = new Set(s.resolvedCases)
+    n.add(id)
+    return { resolvedCases: n }
+  }),
 
   notes:INITIAL_NOTES, newNote:"",
   addNote: () => {

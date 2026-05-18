@@ -83,12 +83,14 @@ interface CommsStore {
   // Live support
   activeConvId:  string
   convSearch:    string
+  convFilter:    "all" | "online" | "unread"
   sending:       boolean
   draftMessage:  string
   conversations: Conversation[]
 
   setActiveConv:   (id: string) => void
   setConvSearch:   (v: string) => void
+  setConvFilter:   (f: "all" | "online" | "unread") => void
   setDraft:        (v: string) => void
   sendMessage:     () => void
   markResolved:    (convId: string) => void
@@ -110,13 +112,15 @@ interface CommsStore {
 export const useCommsStore = create<CommsStore>((set, get) => ({
   activeConvId:  "c1",
   convSearch:    "",
+  convFilter:    "all",
   sending:       false,
   draftMessage:  "",
   conversations: SEED_CONVS,
 
-  setActiveConv: (id) => set({ activeConvId:id }),
-  setConvSearch: (v)  => set({ convSearch:v }),
-  setDraft:      (v)  => set({ draftMessage:v }),
+  setActiveConv:  (id) => set({ activeConvId:id }),
+  setConvSearch:  (v)  => set({ convSearch:v }),
+  setConvFilter:  (f)  => set({ convFilter:f }),
+  setDraft:       (v)  => set({ draftMessage:v }),
 
   sendMessage: () => {
     const { draftMessage, activeConvId } = get()

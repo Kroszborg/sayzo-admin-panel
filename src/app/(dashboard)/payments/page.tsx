@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -44,7 +44,10 @@ const KPI = [
 export default function PaymentsPage() {
   const router            = useRouter()
   const s                 = usePaymentsStore()
-  const [dateFilter, setDateFilter] = useState("All time")
+  const [dateFilter, setDateFilter]     = useState("All time")
+  const [customFrom, setCustomFrom]     = useState("")
+  const [customTo, setCustomTo]         = useState("")
+  const showCustomDate = dateFilter === "Custom"
 
   const filtered = MOCK_PAYMENTS.filter((p) => {
     const q = s.search.toLowerCase()
@@ -76,7 +79,9 @@ export default function PaymentsPage() {
         {TABS.map((t) => {
           const active = s.activeTab === t.value
           return (
-            <button key={t.value} onClick={() => s.setActiveTab(t.value)}
+            <motion.button key={t.value}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => s.setActiveTab(t.value)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 active ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
@@ -84,7 +89,7 @@ export default function PaymentsPage() {
               <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded",
                 active ? "bg-[#111827] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]"
               )}>{t.count.toLocaleString()}</span>
-            </button>
+            </motion.button>
           )
         })}
       </motion.div>
@@ -108,6 +113,45 @@ export default function PaymentsPage() {
             <FilterDropdown label="Sort: Newest" options={["Sort: Newest","Sort: Oldest","Highest amount","Lowest amount"]}  value={s.sortFilter}  onChange={s.setSortFilter}  width={165} />
           </div>
         </div>
+
+        {/* Custom date range inputs */}
+        <AnimatePresence>
+          {showCustomDate && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.18, ease: [0.33, 1, 0.68, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F3F4F6] bg-[#F9FAFB]">
+                <span className="text-[11.5px] font-semibold text-[#374151]">From</span>
+                <input
+                  type="date"
+                  value={customFrom}
+                  onChange={(e) => setCustomFrom(e.target.value)}
+                  className="h-8 px-3 rounded-lg border border-[#E2E8E6] text-[12px] text-[#374151] outline-none focus:border-[#17B890] bg-white transition-colors"
+                />
+                <span className="text-[11.5px] font-semibold text-[#374151]">To</span>
+                <input
+                  type="date"
+                  value={customTo}
+                  onChange={(e) => setCustomTo(e.target.value)}
+                  min={customFrom}
+                  className="h-8 px-3 rounded-lg border border-[#E2E8E6] text-[12px] text-[#374151] outline-none focus:border-[#17B890] bg-white transition-colors"
+                />
+                {(customFrom || customTo) && (
+                  <button
+                    onClick={() => { setCustomFrom(""); setCustomTo("") }}
+                    className="text-[11px] font-semibold text-[#8FA3A0] hover:text-[#EF4444] transition-colors"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         <div className="overflow-x-auto">
           <table className="w-full">

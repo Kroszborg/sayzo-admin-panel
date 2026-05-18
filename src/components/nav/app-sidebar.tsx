@@ -14,6 +14,7 @@ import {
   UserGroup02Icon,
   BubbleChatIcon,
 } from "@hugeicons/core-free-icons"
+import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 import { UserDropdown } from "@/components/shared/user-dropdown"
 import { useThemeStore } from "@/store/theme-store"
@@ -81,23 +82,26 @@ export function AppSidebar() {
           {WORKSPACE.map((item) => {
             const on = active(item.href)
             return (
-              <li key={item.href}>
+              <motion.li key={item.href} whileTap={{ scale: 0.97 }}>
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-colors",
-                    on ? "bg-[#E8F7F3] text-[#17B890] font-semibold" : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827]"
+                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
+                    on
+                      ? "bg-[#E8F7F3] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8]"
+                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827] hover:translate-x-0.5"
                   )}
                 >
                   <HugeiconsIcon
                     icon={item.icon}
                     size={16}
                     strokeWidth={on ? 2 : 1.5}
-                    className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0"}
+                    className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0 group-hover:text-[#374151]"}
                   />
                   <span className="flex-1 leading-tight">{item.label}</span>
+                  {on && <span className="w-1 h-1 rounded-full bg-[#17B890] shrink-0" />}
                 </Link>
-              </li>
+              </motion.li>
             )
           })}
         </ul>
@@ -108,12 +112,14 @@ export function AppSidebar() {
           {PLATFORM.map((item) => {
             const on = active(item.href)
             return (
-              <li key={item.href}>
+              <motion.li key={item.href} whileTap={{ scale: 0.97 }}>
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-colors",
-                    on ? "bg-[#E8F7F3] text-[#17B890] font-semibold" : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827]"
+                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
+                    on
+                      ? "bg-[#E8F7F3] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8]"
+                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827] hover:translate-x-0.5"
                   )}
                 >
                   <HugeiconsIcon
@@ -123,8 +129,9 @@ export function AppSidebar() {
                     className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0"}
                   />
                   <span className="leading-tight">{item.label}</span>
+                  {on && <span className="w-1 h-1 rounded-full bg-[#17B890] ml-auto shrink-0" />}
                 </Link>
-              </li>
+              </motion.li>
             )
           })}
         </ul>
@@ -133,22 +140,37 @@ export function AppSidebar() {
       {/* ── Theme toggle + User profile ── */}
       <div className="border-t border-[#E5E7EB] px-3 pt-2.5 pb-3 shrink-0 space-y-1">
         {/* Dark / Light toggle */}
-        <button
+        <motion.button
+          whileHover={{ backgroundColor: theme === "dark" ? "#1C1C22" : "#F5F8F7" }}
+          whileTap={{ scale: 0.98 }}
           onClick={toggleTheme}
-          className="flex items-center justify-between w-full px-2.5 py-2 rounded-lg hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] transition-colors group"
+          className="flex items-center justify-between w-full px-2.5 py-2 rounded-lg transition-colors"
           aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
           <div className="flex items-center gap-2.5">
-            <span className="text-[15px] leading-none">{theme === "dark" ? "☀️" : "🌙"}</span>
+            <div className="w-[22px] h-[22px] flex items-center justify-center overflow-hidden">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={theme}
+                  initial={{ rotate: -30, scale: 0.5, opacity: 0 }}
+                  animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                  exit={{ rotate: 30, scale: 0.5, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
+                  className="text-[18px] leading-none block"
+                >
+                  {theme === "dark" ? "☀️" : "🌙"}
+                </motion.span>
+              </AnimatePresence>
+            </div>
             <span className="text-[12px] font-medium text-[#374151]">
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </span>
           </div>
           {/* Toggle pill */}
-          <div className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${theme === "dark" ? "bg-[#17B890]" : "bg-[#D1D5DB]"}`}>
+          <div className={`relative w-9 h-5 rounded-full transition-colors duration-200 ${theme === "dark" ? "bg-[#17B890] shadow-[0_0_8px_#17B89044]" : "bg-[#D1D5DB]"}`}>
             <div className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${theme === "dark" ? "translate-x-4" : "translate-x-0.5"}`} />
           </div>
-        </button>
+        </motion.button>
 
         {/* User dropdown */}
         <UserDropdown direction="up" />

@@ -2,14 +2,17 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Search01Icon, Add01Icon, Sorting01Icon } from "@hugeicons/core-free-icons"
+import { Search01Icon, Add01Icon, ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons"
 import { FilterDropdown } from "@/components/shared/filter-dropdown"
 import { useTeamStore, RoleTab } from "@/store/team-store"
 import { useAlertStore } from "@/store/alert-store"
 import { MOCK_TEAM, TeamRole } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
+
+const ITEMS_PER_PAGE = 12
 
 // ─── Role badge styles ─────────────────────────────────────────────────────
 
@@ -100,9 +103,10 @@ function MemberCard({ member }: { member: typeof MOCK_TEAM[0] }) {
 // ─── Page ───────────────────────────────────────────────────────────────────
 
 export default function TeamPage() {
-  const router = useRouter()
-  const s      = useTeamStore()
-  const alert  = useAlertStore()
+  const router  = useRouter()
+  const s       = useTeamStore()
+  const alert   = useAlertStore()
+  const [page, setPage] = useState(1)
 
   // Filter members
   const filtered = MOCK_TEAM.filter((m) => {
@@ -111,6 +115,12 @@ export default function TeamPage() {
     const matchSearch = !q || m.name.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)
     return matchTab && matchSearch
   })
+
+  const totalPages  = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE))
+  const pageMembers = filtered.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE)
+
+  // Reset to page 1 when filters change
+  useEffect(() => { setPage(1) }, [s.activeTab, s.search])
 
   return (
     <div>
@@ -134,12 +144,14 @@ export default function TeamPage() {
         {/* Tabs */}
         <div className="flex flex-1">
           {ROLE_TABS.map((t) => (
-            <button key={t} onClick={() => s.setActiveTab(t)}
+            <motion.button key={t}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => s.setActiveTab(t)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 s.activeTab === t ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
               {t}
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -172,11 +184,11 @@ export default function TeamPage() {
 
       {/* Member cards grid */}
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.26, delay:0.08 }}
-        className="bg-[#F8FAFB] border-l border-r border-b border-[#E5E7EB] rounded-b-xl p-4">
+        className="bg-[#F8FAFB] border-l border-r border-[#E5E7EB] p-4">
         <AnimatePresence mode="popLayout">
-          {filtered.length > 0 ? (
+          {pageMembers.length > 0 ? (
             <div className="grid grid-cols-3 gap-4">
-              {filtered.map((member) => (
+              {pageMembers.map((member) => (
                 <MemberCard key={member.id} member={member} />
               ))}
             </div>
@@ -188,6 +200,79 @@ export default function TeamPage() {
           )}
         </AnimatePresence>
       </motion.div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="bg-white border-l border-r border-b border-[#E5E7EB] rounded-b-xl px-4 py-3 flex items-center justify-between">
+          <p className="text-[12px] text-[#8FA3A0]">
+            Showing <span className="font-semibold text-[#374151]">{(page - 1) * ITEMS_PER_PAGE + 1}–{Math.min(page * ITEMS_PER_PAGE, filtered.length)}</span> of{" "}
+            <span className="font-semibold text-[#374151]">{filtered.length}</span> members
+          </p>
+          <div className="flex items-center gap-1">
+            {/* Prev */}
+            <motion.button
+              whileTap={{ scale: 0.94 }}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="w-7 h-7 rounded flex items-center justify-center text-[#374151] hover:bg-[#F5F8F7] disabled:opacity-30 transition-colors"
+            >
+              <HugeiconsIcon icon={ArrowLeft01Icon} size={12} strokeWidth={2.5} />
+            </motion.button>
+
+            {/* Page numbers — Google-style */}
+            {(() => {
+              const pages: (number | "…")[] = []
+              if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i)
+              } else {
+                pages.push(1)
+                if (page > 3) pages.push("…")
+                const start = Math.max(2, page - 1)
+                const end   = Math.min(totalPages - 1, page + 1)
+                for (let i = start; i <= end; i++) pages.push(i)
+                if (page < totalPages - 2) pages.push("…")
+                pages.push(totalPages)
+              }
+              return pages.map((p, i) =>
+                p === "…" ? (
+                  <span key={`e${i}`} className="w-7 h-7 flex items-center justify-center text-[12px] text-[#8FA3A0]">…</span>
+                ) : (
+                  <motion.button
+                    key={p}
+                    whileHover={page !== p ? { scale: 1.08 } : {}}
+                    whileTap={{ scale: 0.92 }}
+                    onClick={() => setPage(p as number)}
+                    className={cn(
+                      "w-7 h-7 rounded text-[12px] font-medium transition-colors",
+                      page === p ? "bg-[#111827] text-white" : "text-[#374151] hover:bg-[#F5F8F7]"
+                    )}
+                  >
+                    {p}
+                  </motion.button>
+                )
+              )
+            })()}
+
+            {/* Next */}
+            <motion.button
+              whileTap={{ scale: 0.94 }}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              className="w-7 h-7 rounded flex items-center justify-center text-[#374151] hover:bg-[#F5F8F7] disabled:opacity-30 transition-colors"
+            >
+              <HugeiconsIcon icon={ArrowRight01Icon} size={12} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+          <div className="w-[140px]" /> {/* spacer for alignment */}
+        </div>
+      )}
+      {totalPages <= 1 && (
+        <div className="bg-white border-l border-r border-b border-[#E5E7EB] rounded-b-xl px-4 py-3">
+          <p className="text-[12px] text-[#8FA3A0]">
+            Showing <span className="font-semibold text-[#374151]">{filtered.length}</span> member{filtered.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+      )}
 
       {/* ── Pending invitations table ── */}
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.28, delay:0.12 }}
