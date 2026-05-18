@@ -126,7 +126,9 @@ export default function BroadcastPage() {
               : "Select an audience above to continue"
             }
           </div>
-          <button
+          <motion.button
+            whileHover={canSend && !s.bcastSending ? { scale: 1.015 } : {}}
+            whileTap={canSend && !s.bcastSending ? { scale: 0.97 } : {}}
             onClick={s.sendBroadcast}
             disabled={!canSend}
             className={cn(
@@ -140,7 +142,7 @@ export default function BroadcastPage() {
           >
             <HugeiconsIcon icon={SentIcon} size={13} strokeWidth={2} />
             {s.bcastSending ? "Sending…" : "Send Broadcast"}
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

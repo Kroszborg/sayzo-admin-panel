@@ -266,13 +266,13 @@ export default function UsersPage() {
           <FilterDropdown label="Availability" options={["Availability","Available","Busy","Offline"]}                               value={store.availFilter}  onChange={store.setAvailFilter}  width={140} />
           <FilterDropdown label="All Cities" options={["All Cities","Mumbai","Bengaluru","Delhi NCR","Hyderabad","Pune","Chennai","Ahmedabad","Kolkata"]} value={store.cityFilter} onChange={store.setCityFilter} width={165} />
           <FilterDropdown label="Joined Time" options={["Joined Time","Last 7 days","Last 30 days","Last 3 months","Last year"]}      value={store.joinedFilter} onChange={store.setJoinedFilter} width={165} />
-          <button
+          <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
             onClick={() => store.setExportOpen(true)}
             className="ml-auto flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors"
           >
             <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />
             Export CSV
-          </button>
+          </motion.button>
         </div>
 
         {/* Table */}
@@ -346,12 +346,12 @@ export default function UsersPage() {
                         <span className="text-[#8FA3A0]"> {taskWord}</span>
                       </td>
                       <td className="px-4 py-3">
-                        <button
+                        <motion.button whileTap={{ scale: 0.95 }}
                           onClick={() => router.push(`/users/${u.id}`)}
                           className="h-7 px-3 rounded-lg border border-[#E2E8E6] text-[11.5px] font-semibold text-[#374151] hover:bg-[#F5F8F7] hover:border-[#D1D5DB] transition-all"
                         >
                           View
-                        </button>
+                        </motion.button>
                       </td>
                     </motion.tr>
                   )

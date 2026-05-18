@@ -208,10 +208,11 @@ function FeedCard({ ev, selected, onSelect }: { ev: LiveEvent; selected: boolean
           {ev.actions.length > 0 && (
             <div className="flex items-center gap-2">
               {ev.actions.map((a) => (
-                <button key={a.label} onClick={(e) => e.stopPropagation()}
+                <motion.button key={a.label} whileTap={{ scale: 0.95 }}
+                  onClick={(e) => e.stopPropagation()}
                   className={cn("h-7 px-3 rounded-lg text-[11px] font-semibold transition-colors",
                     a.dark ? "bg-[#111827] text-white hover:bg-[#1f2937]" : "border border-[#E5E7EB] text-[#374151] hover:bg-[#F5F8F7]"
-                  )}>{a.label}</button>
+                  )}>{a.label}</motion.button>
               ))}
             </div>
           )}
@@ -315,12 +316,12 @@ function DetailPanel({ ev }: { ev: LiveEvent }) {
 
       {/* CTA */}
       <div className="p-4 border-t border-[#F3F4F6] shrink-0">
-        <button
+        <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
           onClick={() => router.push("/disputes")}
           className="w-full h-10 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors"
         >
           Open full case →
-        </button>
+        </motion.button>
       </div>
     </motion.div>
   )
@@ -349,20 +350,21 @@ export default function LiveFeedPage() {
           <span className="flex items-center gap-1.5 h-8 px-3 rounded-full bg-[#E8F7F3] text-[#17B890] text-[11px] font-bold border border-[#A8DFD0]">
             <span className="w-2 h-2 rounded-full bg-[#17B890] animate-pulse" />LIVE
           </span>
-          <button
+          <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
             onClick={() => setExportOpen(true)}
             className="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[11px] font-bold transition-colors"
           >
             <HugeiconsIcon icon={Download01Icon} size={12} strokeWidth={2} />
             Export log
-          </button>
+          </motion.button>
         </div>
       </div>
 
       {/* Filter tabs */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
         {FILTER_TABS.map((f) => (
-          <button key={f.id} onClick={() => setFilter(f.id)}
+          <motion.button key={f.id} whileTap={{ scale: 0.96 }}
+            onClick={() => setFilter(f.id)}
             className={cn(
               "flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12px] font-medium border transition-colors whitespace-nowrap",
               activeFilter === f.id
@@ -373,7 +375,7 @@ export default function LiveFeedPage() {
             <span className={cn("text-[10px] font-bold", activeFilter === f.id ? "text-white/60" : "text-[#8FA3A0]")}>
               {f.count.toLocaleString()}
             </span>
-          </button>
+          </motion.button>
         ))}
       </div>
 
@@ -389,10 +391,11 @@ export default function LiveFeedPage() {
           {visible.length === 0 && (
             <div className="flex flex-col items-center justify-center py-24 text-[#8FA3A0]">
               <p className="text-[14px] font-semibold">No events match the current filter</p>
-              <button onClick={() => { setFilter("All Events"); setSeverity("all") }}
+              <motion.button whileTap={{ scale: 0.97 }}
+                onClick={() => { setFilter("All Events"); setSeverity("all") }}
                 className="mt-3 text-[12px] text-[#17B890] hover:underline font-semibold">
                 Clear filters
-              </button>
+              </motion.button>
             </div>
           )}
         </div>

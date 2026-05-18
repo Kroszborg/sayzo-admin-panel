@@ -98,7 +98,8 @@ function AssignModal() {
                   {agents.map((agent) => {
                     const isSel = s.selectedAgent === agent.id
                     return (
-                      <button key={agent.id} onClick={() => s.setSelectedAgent(agent.id)}
+                      <motion.button key={agent.id} whileTap={{ scale: 0.98 }}
+                        onClick={() => s.setSelectedAgent(agent.id)}
                         className={cn("w-full flex items-center gap-2.5 p-2.5 rounded-xl border text-left transition-all",
                           isSel ? "border-[#17B890] bg-[#F0FDF4]" : "border-[#E5E7EB] hover:bg-[#F9FAFB]"
                         )}>
@@ -115,7 +116,7 @@ function AssignModal() {
                           <p className="text-[10px] text-[#8FA3A0]">{agent.role} · Last active {agent.lastAction}</p>
                         </div>
                         {agent.isOnline && <div className="w-2 h-2 rounded-full bg-[#22C55E] shrink-0" />}
-                      </button>
+                      </motion.button>
                     )
                   })}
                 </div>
@@ -126,13 +127,15 @@ function AssignModal() {
               </div>
 
               <div className="flex gap-2 px-5 pb-5">
-                <button onClick={() => s.setAssignOpen(false)}
-                  className="flex-1 h-8 rounded-lg border border-[#E2E8E6] text-[12px] font-semibold text-[#374151] hover:bg-[#F5F8F7]">Cancel</button>
-                <button onClick={s.confirmAssign} disabled={!s.selectedAgent}
+                <motion.button whileTap={{ scale: 0.97 }}
+                  onClick={() => s.setAssignOpen(false)}
+                  className="flex-1 h-8 rounded-lg border border-[#E2E8E6] text-[12px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">Cancel</motion.button>
+                <motion.button whileTap={{ scale: 0.97 }}
+                  onClick={s.confirmAssign} disabled={!s.selectedAgent}
                   className="flex-1 h-8 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[12px] font-bold flex items-center justify-center gap-1.5 disabled:opacity-40 transition-colors">
                   <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={2} />
                   Assign
-                </button>
+                </motion.button>
               </div>
             </motion.div>
           </DialogContent>
@@ -181,7 +184,8 @@ export default function SupportPage() {
         {TABS.map((t) => {
           const active = s.activeTab === t.value
           return (
-            <button key={t.value} onClick={() => s.setActiveTab(t.value)}
+            <motion.button key={t.value} whileTap={{ scale: 0.97 }}
+              onClick={() => s.setActiveTab(t.value)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 active ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
@@ -189,7 +193,7 @@ export default function SupportPage() {
               <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded",
                 active ? "bg-[#111827] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]"
               )}>{t.count}</span>
-            </button>
+            </motion.button>
           )
         })}
       </motion.div>
@@ -283,11 +287,13 @@ export default function SupportPage() {
                       <td className="px-3 py-3 text-[11.5px] text-[#8FA3A0]">{ticket.createdAt}</td>
                       <td className="px-3 py-3">
                         <div className="flex items-center gap-1.5">
-                          <button onClick={() => router.push(`/support/${ticket.id}`)}
-                            className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">View</button>
+                          <motion.button whileTap={{ scale: 0.95 }}
+                            onClick={() => router.push(`/support/${ticket.id}`)}
+                            className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">View</motion.button>
                           {!ticket.assignedTo && (
-                            <button onClick={() => s.setAssignOpen(true, ticket.id)}
-                              className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">Assign</button>
+                            <motion.button whileTap={{ scale: 0.95 }}
+                              onClick={() => s.setAssignOpen(true, ticket.id)}
+                              className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">Assign</motion.button>
                           )}
                         </div>
                       </td>
@@ -307,10 +313,12 @@ export default function SupportPage() {
           </p>
           <div className="flex items-center gap-1">
             {[1,2,3].map((p) => (
-              <button key={p} onClick={() => s.setPage(p)}
+              <motion.button key={p} whileTap={{ scale: 0.92 }}
+                whileHover={s.page !== p ? { scale: 1.08 } : {}}
+                onClick={() => s.setPage(p)}
                 className={cn("w-7 h-7 rounded text-[11px] font-medium transition-colors",
                   s.page===p ? "bg-[#111827] text-white" : "text-[#374151] hover:bg-[#F5F8F7]"
-                )}>{p}</button>
+                )}>{p}</motion.button>
             ))}
           </div>
           <div className="flex items-center gap-2 text-[12px] text-[#8FA3A0]">

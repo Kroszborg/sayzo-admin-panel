@@ -84,7 +84,8 @@ function ExportModal() {
                       { id:"all",      title:"All tasks",       desc:"Export complete tasks with your status and column selections below",      foot:"4,817 tasks" },
                       { id:"filtered", title:"Current filters", desc:"Export only tasks matching your active role, city, and status filters",    foot:"No filters active" },
                     ] as const).map((opt) => (
-                      <button key={opt.id} onClick={() => s.setExportScope(opt.id)}
+                      <motion.button key={opt.id} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}
+                        onClick={() => s.setExportScope(opt.id)}
                         className={cn("flex flex-col gap-1.5 p-4 rounded-xl border text-left transition-all",
                           s.exportScope === opt.id ? "border-[#111827] bg-white shadow-sm" : "border-[#E5E7EB] bg-[#F9FAFB] hover:border-[#D1D5DB]"
                         )}>
@@ -98,7 +99,7 @@ function ExportModal() {
                         </div>
                         <p className="text-[11.5px] text-[#8FA3A0] leading-snug">{opt.desc}</p>
                         <p className="text-[11px] font-semibold text-[#374151] pt-1 border-t border-[#F3F4F6]">{opt.foot}</p>
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
@@ -110,19 +111,21 @@ function ExportModal() {
                     <div>
                       <p className="text-[10px] font-bold text-[#8FA3A0] uppercase tracking-wide mb-2">Role</p>
                       <div className="flex gap-2">{ROLES.map((r) => (
-                        <button key={r} onClick={() => s.setExportRole(r)}
+                        <motion.button key={r} whileTap={{ scale: 0.95 }}
+                          onClick={() => s.setExportRole(r)}
                           className={cn("h-7 px-3 rounded-full text-[11.5px] font-medium border transition-colors",
                             s.exportRole === r ? "bg-[#111827] text-white border-[#111827]" : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#D1D5DB]"
-                          )}>{r}</button>
+                          )}>{r}</motion.button>
                       ))}</div>
                     </div>
                     <div>
                       <p className="text-[10px] font-bold text-[#8FA3A0] uppercase tracking-wide mb-2">Task status</p>
                       <div className="flex gap-2 flex-wrap">{STATUSES.map((st) => (
-                        <button key={st} onClick={() => s.setExportStatus(st)}
+                        <motion.button key={st} whileTap={{ scale: 0.95 }}
+                          onClick={() => s.setExportStatus(st)}
                           className={cn("h-7 px-3 rounded-full text-[11.5px] font-medium border transition-colors",
                             s.exportStatus === st ? "bg-[#111827] text-white border-[#111827]" : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#D1D5DB]"
-                          )}>{st}</button>
+                          )}>{st}</motion.button>
                       ))}</div>
                     </div>
                     <div>
@@ -144,12 +147,14 @@ function ExportModal() {
                   <span>~1.2 MB</span><span>ready in ~8s</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button onClick={() => s.setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] text-[12.5px] font-semibold text-[#374151] hover:bg-white bg-[#F9FAFB]">Cancel</button>
-                  <button onClick={() => s.setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center gap-1.5">
+                  <motion.button whileTap={{ scale: 0.97 }}
+                    onClick={() => s.setExportOpen(false)}
+                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] text-[12.5px] font-semibold text-[#374151] hover:bg-white bg-[#F9FAFB] transition-colors">Cancel</motion.button>
+                  <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
+                    onClick={() => s.setExportOpen(false)}
+                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-colors">
                     <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={2} />Generate report
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
@@ -192,10 +197,11 @@ export default function TasksPage() {
           <h1 className="text-[20px] font-extrabold text-[#111827]">Tasks</h1>
           <p className="text-[12px] text-[#8FA3A0] mt-0.5">All tasks across the platform · monitor matching, intervene on disputes, force-close when needed</p>
         </div>
-        <button onClick={() => s.setExportOpen(true)}
+        <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
+          onClick={() => s.setExportOpen(true)}
           className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors mt-1">
           <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />Export
-        </button>
+        </motion.button>
       </motion.div>
 
       {/* ── Status tabs ── */}
@@ -205,7 +211,8 @@ export default function TasksPage() {
           const active = s.activeTab === t.value
           const badgeCls = TAB_BADGE[t.value] ?? (active ? "bg-[#111827] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]")
           return (
-            <button key={t.value} onClick={() => s.setActiveTab(t.value)}
+            <motion.button key={t.value} whileTap={{ scale: 0.97 }}
+              onClick={() => s.setActiveTab(t.value)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 active ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
@@ -213,7 +220,7 @@ export default function TasksPage() {
               <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded", active ? "bg-[#111827] text-white" : badgeCls)}>
                 {t.count.toLocaleString()}
               </span>
-            </button>
+            </motion.button>
           )
         })}
       </motion.div>
@@ -305,19 +312,24 @@ export default function TasksPage() {
             <span className="font-semibold text-[#374151]">{filtered.length.toLocaleString()}</span> tasks
           </p>
           <div className="flex items-center gap-1">
-            <button onClick={() => s.page>1 && s.setPage(s.page-1)} disabled={s.page===1}
-              className="w-7 h-7 rounded text-[11px] text-[#374151] hover:bg-[#F5F8F7] disabled:opacity-30">‹</button>
+            <motion.button whileTap={{ scale: 0.94 }}
+              onClick={() => s.page>1 && s.setPage(s.page-1)} disabled={s.page===1}
+              className="w-7 h-7 rounded text-[11px] text-[#374151] hover:bg-[#F5F8F7] disabled:opacity-30">‹</motion.button>
             {[1,2,3,4].map((p) => (
-              <button key={p} onClick={() => s.setPage(p)}
+              <motion.button key={p} whileTap={{ scale: 0.92 }}
+                whileHover={s.page !== p ? { scale: 1.08 } : {}}
+                onClick={() => s.setPage(p)}
                 className={cn("w-7 h-7 rounded text-[11px] font-medium transition-colors",
                   s.page===p ? "bg-[#111827] text-white" : "text-[#374151] hover:bg-[#F5F8F7]"
-                )}>{p}</button>
+                )}>{p}</motion.button>
             ))}
             <span className="w-7 h-7 flex items-center justify-center text-[11px] text-[#8FA3A0]">…</span>
-            <button onClick={() => s.setPage(342)}
-              className={cn("w-7 h-7 rounded text-[11px] font-medium", s.page===342?"bg-[#111827] text-white":"text-[#374151] hover:bg-[#F5F8F7]")}>342</button>
-            <button onClick={() => s.page<totalPages && s.setPage(s.page+1)} disabled={s.page>=totalPages}
-              className="w-7 h-7 rounded text-[11px] text-[#374151] hover:bg-[#F5F8F7] disabled:opacity-30">›</button>
+            <motion.button whileTap={{ scale: 0.92 }}
+              onClick={() => s.setPage(342)}
+              className={cn("w-7 h-7 rounded text-[11px] font-medium", s.page===342?"bg-[#111827] text-white":"text-[#374151] hover:bg-[#F5F8F7]")}>342</motion.button>
+            <motion.button whileTap={{ scale: 0.94 }}
+              onClick={() => s.page<totalPages && s.setPage(s.page+1)} disabled={s.page>=totalPages}
+              className="w-7 h-7 rounded text-[11px] text-[#374151] hover:bg-[#F5F8F7] disabled:opacity-30">›</motion.button>
           </div>
           <div className="flex items-center gap-2 text-[12px] text-[#8FA3A0]">
             Rows
