@@ -13,6 +13,8 @@ import {
   BellDotIcon,
   UserGroup02Icon,
   BubbleChatIcon,
+  Sun01Icon,
+  Moon02Icon,
 } from "@hugeicons/core-free-icons"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
@@ -148,18 +150,23 @@ export function AppSidebar() {
           aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-[22px] h-[22px] flex items-center justify-center overflow-hidden">
+            <div className="w-[22px] h-[22px] flex items-center justify-center overflow-hidden shrink-0">
               <AnimatePresence mode="wait" initial={false}>
-                <motion.span
+                <motion.div
                   key={theme}
-                  initial={{ rotate: -30, scale: 0.5, opacity: 0 }}
+                  initial={{ rotate: -45, scale: 0.4, opacity: 0 }}
                   animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                  exit={{ rotate: 30, scale: 0.5, opacity: 0 }}
-                  transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
-                  className="text-[18px] leading-none block"
+                  exit={{ rotate: 45, scale: 0.4, opacity: 0 }}
+                  transition={{ duration: 0.22, ease: [0.33, 1, 0.68, 1] }}
+                  className="flex items-center justify-center"
                 >
-                  {theme === "dark" ? "☀️" : "🌙"}
-                </motion.span>
+                  <HugeiconsIcon
+                    icon={theme === "dark" ? Sun01Icon : Moon02Icon}
+                    size={16}
+                    strokeWidth={1.8}
+                    className={theme === "dark" ? "text-[#F59E0B]" : "text-[#6366F1]"}
+                  />
+                </motion.div>
               </AnimatePresence>
             </div>
             <span className="text-[12px] font-medium text-[#374151]">

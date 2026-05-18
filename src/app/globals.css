@@ -360,6 +360,44 @@
 [data-theme='dark'] .text-\[\#16A34A\] { color: #4ADE80 !important; }
 [data-theme='dark'] .text-\[\#17B890\] { color: #2DD4BF !important; }
 
+/* ── Notification unread row (green tint) ───────────────────── */
+[data-theme='dark'] .bg-\[\#FAFFF9\] { background-color: #0A1A14 !important; }
+[data-theme='dark'] .hover\:bg-\[\#FAFFF9\]:hover { background-color: #0A1A14 !important; }
+
+/* ── Extra elevated/section backgrounds ─────────────────────── */
+[data-theme='dark'] .bg-\[\#F8FAFB\] { background-color: var(--dm-base) !important; }
+
+/* ── Border-right/left variants ──────────────────────────────── */
+[data-theme='dark'] .border-r-\[\#E5E7EB\],
+[data-theme='dark'] .border-l-\[\#E5E7EB\] { border-color: var(--dm-border) !important; }
+[data-theme='dark'] .border-l-\[\#F3F4F6\] { border-color: var(--dm-border-2) !important; }
+
+/* ── Inset ring / box-shadow on active nav items ────────────── */
+[data-theme='dark'] .shadow-\[inset_0_0_0_1px_\#D1F0E8\] {
+  box-shadow: inset 0 0 0 1px #1A4035 !important;
+}
+
+/* ── Border inside confirm dialog footer ────────────────────── */
+[data-theme='dark'] .bg-\[\#F9FAFB\] { background-color: var(--dm-elevated) !important; }
+
+/* ── Subtle card hover shadow in dark ───────────────────────── */
+[data-theme='dark'] .hover\:shadow-\[0_4px_14px_rgba\(0\,0\,0\,0\.06\)\]:hover {
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35) !important;
+}
+
+/* ── "Mark all read" / outline buttons in dark ───────────────── */
+[data-theme='dark'] .border-\[\#E2E8E6\] { border-color: var(--dm-border) !important; }
+
+/* ── Sidebar active nav item bg ──────────────────────────────── */
+[data-theme='dark'] .bg-\[\#E8F7F3\] { background-color: var(--dm-brand-bg) !important; }
+
+/* ── Live feed date filter bg (custom date inputs) ───────────── */
+[data-theme='dark'] .bg-\[\#F9FAFB\].border-b { background-color: var(--dm-elevated) !important; }
+
+/* ── Topbar/header white bg ──────────────────────────────────── */
+[data-theme='dark'] header.bg-white,
+[data-theme='dark'] .sticky.bg-white { background-color: var(--dm-surface) !important; }
+
 /* ── Module Home page ────────────────────────────────────────── */
 /* Keep cloud background on modules/auth pages as-is — they look fine */
 

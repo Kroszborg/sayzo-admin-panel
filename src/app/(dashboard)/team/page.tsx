@@ -157,11 +157,13 @@ export default function TeamPage() {
 
         {/* New invite */}
         <div className="px-4 py-2 shrink-0 border-l border-[#F3F4F6]">
-          <Link href="/team/invite"
-            className="flex items-center gap-1.5 h-8 px-4 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[12px] font-bold transition-colors">
-            <HugeiconsIcon icon={Add01Icon} size={13} strokeWidth={2} />
-            + New invite
-          </Link>
+          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
+            <Link href="/team/invite"
+              className="flex items-center gap-1.5 h-8 px-4 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[12px] font-bold transition-colors">
+              <HugeiconsIcon icon={Add01Icon} size={13} strokeWidth={2} />
+              New invite
+            </Link>
+          </motion.div>
         </div>
       </motion.div>
 

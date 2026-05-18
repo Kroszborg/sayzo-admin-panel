@@ -79,25 +79,26 @@ function NotifRow({ n, onRead }: { n: Notification; onRead: (id: string) => void
       initial={{ opacity:0, y:4 }}
       animate={{ opacity:1, y:0 }}
       exit={{ opacity:0, y:-2 }}
+      whileHover={{ x: 2 }}
       transition={{ duration:0.18 }}
       onClick={handleClick}
       className={cn(
-        "flex items-start gap-3 px-5 py-3.5 border-b border-[#F9FAFB] cursor-pointer transition-colors last:border-0",
-        !n.isRead ? "bg-[#FAFFF9]" : "hover:bg-[#FAFAFA]"
+        "flex items-start gap-3 px-5 py-4 border-b border-[#F9FAFB] cursor-pointer transition-colors last:border-0",
+        !n.isRead ? "bg-[#FAFFF9] hover:bg-[#F0FDF4]" : "hover:bg-[#FAFAFA]"
       )}
     >
       {/* Category icon */}
-      <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center shrink-0 mt-0.5",
+      <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5",
         CAT_BG[n.category] ?? "bg-[#F3F4F6]"
       )}>
-        <HugeiconsIcon icon={TAB_ICONS[n.category]} size={15} strokeWidth={1.5}
+        <HugeiconsIcon icon={TAB_ICONS[n.category]} size={16} strokeWidth={1.5}
           className={CAT_COLOR[n.category] ?? "text-[#6B7280]"} />
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-          <p className={cn("text-[12.5px] leading-snug", !n.isRead ? "font-bold text-[#111827]" : "font-semibold text-[#374151]")}>
+        <div className="flex items-center gap-2 mb-1 flex-wrap">
+          <p className={cn("text-[13px] leading-snug", !n.isRead ? "font-bold text-[#111827]" : "font-medium text-[#374151]")}>
             {n.title}
           </p>
           <SevIcon sev={n.severity} size={12} />
@@ -107,17 +108,18 @@ function NotifRow({ n, onRead }: { n: Notification; onRead: (id: string) => void
             </span>
           )}
         </div>
-        <p className="text-[11.5px] text-[#8FA3A0] leading-snug">{n.description}</p>
+        <p className="text-[12px] text-[#8FA3A0] leading-relaxed">{n.description}</p>
       </div>
 
       {/* CTA + timestamp + dot */}
       <div className="flex flex-col items-end gap-2 shrink-0">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.95 }}
           onClick={handleCta}
           className="h-6 px-2.5 rounded-lg bg-[#17B890] hover:opacity-90 text-white text-[10.5px] font-bold transition-opacity whitespace-nowrap"
         >
           {n.cta}
-        </button>
+        </motion.button>
         <div className="flex items-center gap-1.5">
           <span className="text-[10.5px] text-[#8FA3A0] whitespace-nowrap">{n.createdAt}</span>
           <AnimatePresence>
@@ -164,11 +166,13 @@ export default function NotificationsPage() {
         className="flex items-center justify-between mb-5">
         <h1 className="text-[20px] font-extrabold text-[#111827]">Notifications</h1>
         {totalUnread > 0 && (
-          <button onClick={s.markAllRead}
+          <motion.button
+            whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
+            onClick={s.markAllRead}
             className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors">
             <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={1.5} className="text-[#17B890]" />
             Mark all read
-          </button>
+          </motion.button>
         )}
       </motion.div>
 
@@ -179,7 +183,9 @@ export default function NotificationsPage() {
           const active  = s.activeTab === tab
           const unread  = s.unreadCount(tab === "All" ? undefined : tab as any)
           return (
-            <button key={tab} onClick={() => s.setTab(tab)}
+            <motion.button key={tab}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => s.setTab(tab)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 active ? "border-[#17B890] text-[#17B890] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
@@ -191,7 +197,7 @@ export default function NotificationsPage() {
                   active ? "bg-[#17B890] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]"
                 )}>{unread}</span>
               )}
-            </button>
+            </motion.button>
           )
         })}
       </motion.div>
