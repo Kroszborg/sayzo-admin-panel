@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, use } from "react"
 import { MOCK_USERS, MOCK_TASKS, MOCK_ACTIVITY } from "@/lib/mock-data"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
@@ -134,12 +134,13 @@ const TRUST_BREAKDOWN = [
 type DetailTab = "Overview" | "Activity Log" | "Trust & Risk" | "Tasks"
 type TaskFilter = "All" | "In Progress" | "Completed" | "Disputed"
 
-export default function UserDetailPage({ params }: { params: { id: string } }) {
+export default function UserDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [tab,        setTab]        = useState<DetailTab>("Overview")
   const [actionOpen, setActionOpen] = useState(false)
   const [taskFilter, setTaskFilter] = useState<TaskFilter>("All")
 
-  const user      = MOCK_USERS.find((u) => u.id === params.id) ?? MOCK_USERS[0]
+  const user      = MOCK_USERS.find((u) => u.id === id) ?? MOCK_USERS[0]
   const allTasks  = MOCK_TASKS.slice(0, 10)
   const initials  = user.name.split(" ").map((n) => n[0]).join("").slice(0, 2)
   const scoreColor = user.trustScore >= 70 ? "#17B890" : user.trustScore >= 50 ? "#F59E0B" : "#EF4444"
@@ -477,7 +478,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                 ))}
               </div>
 
-              {/* Filter tabs */}
+              {/* Filter tabs + sort controls */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-1.5">
                   {(["All","In Progress","Completed","Disputed"] as TaskFilter[]).map((f) => (
@@ -493,45 +494,98 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                     </button>
                   ))}
                 </div>
+                <div className="flex items-center gap-2">
+                  <select className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11.5px] text-[#374151] bg-white cursor-pointer focus:outline-none">
+                    <option>All categories</option>
+                    <option>Design</option>
+                    <option>Programming</option>
+                    <option>Writing</option>
+                  </select>
+                  <select className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11.5px] text-[#374151] bg-white cursor-pointer focus:outline-none">
+                    <option>Newest first</option>
+                    <option>Oldest first</option>
+                    <option>Amount: High to Low</option>
+                  </select>
+                </div>
               </div>
 
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-[#F3F4F6]">
-                    {["Task","Category","Giver","Amount","Status","Accepted"].map((h) => (
+                    <th className="w-8 pb-2.5"><input type="checkbox" className="rounded border-[#D1D5DB]" /></th>
+                    {["Task","Category","Doer","Amount","Status","Posted"].map((h) => (
                       <th key={h} className="text-left text-[10px] font-black tracking-wider text-[#8FA3A0] uppercase pb-2.5 pr-4">{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredTasks.map((task) => (
-                    <tr key={task.id} className="border-b border-[#F9FAFB] hover:bg-[#FAFAFA]">
-                      <td className="py-2.5 pr-4">
-                        <p className="text-[12px] font-semibold text-[#111827] max-w-[180px] truncate">{task.title}</p>
-                        <p className="text-[10px] text-[#8FA3A0]">{task.id}</p>
-                      </td>
-                      <td className="py-2.5 pr-4 text-[12px] text-[#374151]">{task.category}</td>
-                      <td className="py-2.5 pr-4 text-[12px] text-[#374151]">Sneha Joshi</td>
-                      <td className="py-2.5 pr-4 text-[12px] font-bold text-[#111827]">₹{task.amount.toLocaleString("en-IN")}</td>
-                      <td className="py-2.5 pr-4">
-                        <span className={cn("text-[11px] font-semibold flex items-center gap-1",
-                          task.status === "Completed"   ? "text-[#17B890]" :
-                          task.status === "Disputed"    ? "text-[#DC2626]" :
-                          task.status === "In Progress" ? "text-[#2563EB]" :
-                          task.status === "Force-Closed"? "text-[#6B7280]" : "text-[#374151]"
+                  {filteredTasks.map((task, i) => {
+                    const doerNames = ["Sneha Joshi","Karan Patel","None assigned","Matching · 4m left"]
+                    const doer = task.status === "In Progress" ? doerNames[1] :
+                                 task.status === "Completed"   ? doerNames[0] :
+                                 i % 4 === 0                   ? doerNames[3] : doerNames[2]
+                    const isMatching = doer.startsWith("Matching")
+                    const isNone = doer === "None assigned"
+                    return (
+                      <tr key={task.id} className="border-b border-[#F3F4F6] hover:bg-[#FAFAFA] transition-colors">
+                        <td className="py-3 w-8"><input type="checkbox" className="rounded border-[#D1D5DB]" /></td>
+                        <td className="py-3 pr-4">
+                          <p className="text-[12px] font-semibold text-[#111827] max-w-[180px] truncate">{task.title}</p>
+                          <p className="text-[10px] text-[#8FA3A0]">{task.id}</p>
+                        </td>
+                        <td className="py-3 pr-4">
+                          <span className="flex items-center gap-1.5 text-[11.5px] bg-[#F3F4F6] text-[#374151] rounded-md px-2 py-0.5 w-fit">
+                            <span className="w-3 h-3 rounded-sm bg-[#6B7280]/30 shrink-0" />
+                            {task.category}
+                          </span>
+                        </td>
+                        <td className={cn("py-3 pr-4 text-[12px]",
+                          isMatching ? "font-semibold text-[#D97706]" :
+                          isNone     ? "text-[#9CA3AF]" : "text-[#374151]"
                         )}>
-                          {task.status === "Completed" ? "✓" : task.status === "Disputed" ? "⚠" :
-                           task.status === "In Progress" ? "↻" : task.status === "Force-Closed" ? "—" : ""}
-                          {" "}{task.status}
-                        </span>
-                      </td>
-                      <td className="py-2.5 text-[11px] text-[#8FA3A0]">{task.postedAt}</td>
-                    </tr>
-                  ))}
+                          {isNone ? <span className="flex items-center gap-1">— <span className="text-[#9CA3AF]">None assigned</span></span> : doer}
+                        </td>
+                        <td className="py-3 pr-4 text-[12px] font-bold text-[#111827]">₹{task.amount.toLocaleString("en-IN")}</td>
+                        <td className="py-3 pr-4">
+                          <span className={cn("text-[11.5px] font-semibold flex items-center gap-1",
+                            task.status === "Completed"   ? "text-[#17B890]" :
+                            task.status === "Disputed"    ? "text-[#DC2626]" :
+                            task.status === "In Progress" ? "text-[#2563EB]" :
+                            task.status === "Force-Closed"? "text-[#6B7280]" :
+                            i % 5 === 0                   ? "text-[#D97706]" : "text-[#374151]"
+                          )}>
+                            {task.status === "Completed"    && "✓ Completed"}
+                            {task.status === "Disputed"     && "⚡ Disputed"}
+                            {task.status === "In Progress"  && "⟳ In Progress"}
+                            {task.status === "Force-Closed" && "○ Force-Closed"}
+                            {!["Completed","Disputed","In Progress","Force-Closed"].includes(task.status) &&
+                              (i % 5 === 0 ? "⏱ 6 doers nearby" : task.status)}
+                          </span>
+                        </td>
+                        <td className="py-3 text-[11px] text-[#8FA3A0]">{task.postedAt}</td>
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
               <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#F3F4F6]">
-                <p className="text-[11.5px] text-[#8FA3A0]">Showing 1–{filteredTasks.length} of {filteredTasks.length} tasks</p>
+                <p className="text-[11.5px] text-[#8FA3A0]">Showing 1–{filteredTasks.length} of {user.tasks} tasks</p>
+                <div className="flex items-center gap-1.5">
+                  {[1,2,3,4,5].map((p) => (
+                    <button key={p} className={cn("w-7 h-7 rounded-lg text-[11.5px] font-semibold transition-colors",
+                      p === 1 ? "bg-[#111827] text-white" : "text-[#6B7280] hover:bg-[#F5F8F7]"
+                    )}>{p}</button>
+                  ))}
+                  <button className="w-7 h-7 rounded-lg text-[11.5px] font-semibold text-[#6B7280] hover:bg-[#F5F8F7]">›</button>
+                </div>
+                <div className="flex items-center gap-2 text-[11.5px] text-[#6B7280]">
+                  Rows
+                  <select className="h-7 w-14 rounded-lg border border-[#E2E8E6] text-[11.5px] text-[#374151] bg-white text-center focus:outline-none">
+                    <option>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                  </select>
+                </div>
               </div>
             </div>
           )}

@@ -119,7 +119,7 @@ export function AppSidebar() {
                   <span className="flex-1 leading-tight">{item.label}</span>
                   {badge && (
                     badge.alert ? (
-                      <span className="min-w-[18px] h-[18px] rounded-full bg-[#EF4444] text-white text-[9.5px] font-black flex items-center justify-center px-[3px] shrink-0 leading-none tabular-nums">
+                      <span className="min-w-[20px] h-[20px] rounded-full bg-[#FEE2E2] text-[#DC2626] text-[9.5px] font-black flex items-center justify-center px-[3px] shrink-0 leading-none tabular-nums">
                         {badge.count}
                       </span>
                     ) : (
@@ -167,7 +167,7 @@ export function AppSidebar() {
                   <span className="flex-1 leading-tight">{item.label}</span>
                   {badge && (
                     badge.alert ? (
-                      <span className="min-w-[18px] h-[18px] rounded-full bg-[#EF4444] text-white text-[9.5px] font-black flex items-center justify-center px-[3px] shrink-0 leading-none tabular-nums">
+                      <span className="min-w-[20px] h-[20px] rounded-full bg-[#FEE2E2] text-[#DC2626] text-[9.5px] font-black flex items-center justify-center px-[3px] shrink-0 leading-none tabular-nums">
                         {badge.count}
                       </span>
                     ) : (

@@ -149,9 +149,9 @@ function matchesFilter(ev: LiveEvent, filter: FeedFilter, sev: Severity): boolea
   return true
 }
 
-// ─── FeedCard ─────────────────────────────────────────────────────────────
+// ─── FeedItem — icon OUTSIDE card, vertical timeline on left ──────────────
 
-function FeedCard({
+function FeedItem({
   ev, selected, onSelect, isFirst, isLast,
 }: {
   ev: LiveEvent; selected: boolean; onSelect: () => void
@@ -160,45 +160,50 @@ function FeedCard({
   return (
     <motion.div
       layout
-      initial={{ opacity:0, y:10 }}
-      animate={{ opacity:1, y:0 }}
-      exit={{ opacity:0, y:-4 }}
-      transition={{ duration:0.18 }}
-      onClick={onSelect}
-      whileHover={!selected ? { y:-1 } : {}}
-      className={cn(
-        "relative bg-white dark:bg-[#141418] rounded-xl mb-3 cursor-pointer transition-all border-2",
-        selected
-          ? "border-[#111827] dark:border-[#D1D5DB] shadow-md"
-          : "border-[#E5E7EB] dark:border-[#26262E] hover:border-[#D1D5DB] dark:hover:border-[#3A3A44] hover:shadow-sm"
-      )}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
+      transition={{ duration: 0.18 }}
+      className="flex gap-3 mb-3"
     >
-      {/* Selected right-side indicator tab */}
-      {selected && (
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#111827] dark:bg-[#E8E8E8] rounded-l-sm z-10" />
-      )}
-
-      <div className="flex gap-3.5 p-4 pl-5">
-        {/* Icon with timeline spine */}
-        <div className="shrink-0 relative flex flex-col items-center self-stretch" style={{ width: 32 }}>
-          {/* Vertical spine — extends above card for non-first, below for non-last */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 w-px bg-[#E5E7EB] dark:bg-[#26262E]"
-            style={{
-              top: isFirst ? '18px' : '-12px',
-              bottom: isLast ? '18px' : '-12px',
-            }}
-          />
-          <div
-            className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 relative z-10 mt-0.5"
-            style={{ backgroundColor: ev.iconBg, color: ev.iconColor }}
-          >
-            <HugeiconsIcon icon={ev.Icon} size={15} strokeWidth={1.5} />
-          </div>
+      {/* ── Left column: timeline spine + icon ── */}
+      <div className="flex flex-col items-center shrink-0" style={{ width: 32 }}>
+        {/* Upper connector — above icon (bridge gap from previous card) */}
+        <div
+          className={cn("w-px flex-none", isFirst ? "opacity-0" : "bg-[#E5E7EB] dark:bg-[#26262E]")}
+          style={{ height: 14 }}
+        />
+        {/* Icon circle */}
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 relative z-10"
+          style={{ backgroundColor: ev.iconBg, color: ev.iconColor }}
+        >
+          <HugeiconsIcon icon={ev.Icon} size={15} strokeWidth={1.5} />
         </div>
+        {/* Lower connector — fills remaining height of card + 12px gap to next */}
+        {!isLast && (
+          <div className="w-px bg-[#E5E7EB] dark:bg-[#26262E] flex-1" style={{ minHeight: 16 }} />
+        )}
+      </div>
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
+      {/* ── Right: card content ── */}
+      <motion.div
+        whileHover={!selected ? { y: -1 } : {}}
+        onClick={onSelect}
+        className={cn(
+          "relative flex-1 min-w-0 bg-white dark:bg-[#141418] rounded-xl border-2 cursor-pointer transition-all",
+          selected
+            ? "border-[#111827] dark:border-[#D1D5DB] shadow-md"
+            : "border-[#E5E7EB] dark:border-[#26262E] hover:border-[#D1D5DB] dark:hover:border-[#3A3A44] hover:shadow-sm"
+        )}
+      >
+        {/* Selected right-side tab */}
+        {selected && (
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#111827] dark:bg-[#E8E8E8] rounded-l-sm z-10" />
+        )}
+
+        <div className="p-4">
+          {/* Type + sev badges + time */}
           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
             <span
               className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded"
@@ -242,7 +247,7 @@ function FeedCard({
             </div>
           )}
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   )
 }
@@ -254,10 +259,10 @@ function DetailPanel({ ev, onClose }: { ev: LiveEvent; onClose: () => void }) {
   return (
     <motion.div
       key={ev.id}
-      initial={{ opacity:0, x:12 }}
-      animate={{ opacity:1, x:0 }}
-      exit={{ opacity:0, x:12 }}
-      transition={{ duration:0.2, ease:[0.33,1,0.68,1] }}
+      initial={{ opacity: 0, x: 12 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 12 }}
+      transition={{ duration: 0.2, ease: [0.33, 1, 0.68, 1] }}
       className="bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl overflow-hidden flex flex-col h-full"
     >
       {/* Header */}
@@ -271,10 +276,10 @@ function DetailPanel({ ev, onClose }: { ev: LiveEvent; onClose: () => void }) {
           )}
         </div>
         <motion.button
-          whileHover={{ scale: 1.15, backgroundColor: "#F3F4F6" }}
+          whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="w-6 h-6 rounded-lg flex items-center justify-center text-[#6B7280] dark:text-[#9BA1A6] dark:hover:bg-[#26262E] cursor-pointer transition-colors shrink-0"
+          className="w-6 h-6 rounded-lg flex items-center justify-center text-[#6B7280] dark:text-[#9BA1A6] hover:bg-[#F3F4F6] dark:hover:bg-[#26262E] cursor-pointer transition-colors shrink-0"
         >
           <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} />
         </motion.button>
@@ -317,7 +322,7 @@ function DetailPanel({ ev, onClose }: { ev: LiveEvent; onClose: () => void }) {
             <motion.div key={p.name} whileHover={{ scale: 1.01 }} transition={{ duration: 0.1 }}
               className="flex items-center gap-2.5 mb-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#1C1C22] border border-[#F3F4F6] dark:border-[#26262E]">
               <div className="w-8 h-8 rounded-full bg-[#E8F7F3] dark:bg-[#0A2A22] flex items-center justify-center text-[10px] font-bold text-[#17B890] shrink-0">
-                {p.name.split(" ").map(n=>n[0]).join("")}
+                {p.name.split(" ").map(n => n[0]).join("")}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] truncate">{p.name}</p>
@@ -419,13 +424,14 @@ export default function LiveFeedPage() {
         ))}
       </div>
 
-      {/* 2-col layout — flex-1 min-h-0 fills remaining height */}
+      {/* 2-col layout */}
       <div className="flex gap-4 flex-1 min-h-0">
+
         {/* Feed list */}
         <div className="flex-1 overflow-y-auto pr-1 pb-2">
           <AnimatePresence mode="popLayout">
             {visible.map((ev, i) => (
-              <FeedCard
+              <FeedItem
                 key={ev.id}
                 ev={ev}
                 selected={selectedEventId === ev.id}
@@ -454,10 +460,10 @@ export default function LiveFeedPage() {
           {selectedEv && (
             <motion.div
               key="detail-panel-wrap"
-              initial={{ opacity: 0, width: 0, marginLeft: 0 }}
+              initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: 320 }}
-              exit={{ opacity: 0, width: 0, marginLeft: 0 }}
-              transition={{ duration: 0.22, ease: [0.33,1,0.68,1] }}
+              exit={{ opacity: 0, width: 0 }}
+              transition={{ duration: 0.22, ease: [0.33, 1, 0.68, 1] }}
               className="shrink-0 overflow-hidden pb-2"
               style={{ minWidth: 0 }}
             >
