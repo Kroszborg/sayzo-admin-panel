@@ -7,6 +7,7 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Download01Icon, ArrowRight01Icon, Cancel01Icon, Clock01Icon,
   ChartIcon, UserMultiple02Icon, TaskDone01Icon, CreditCardIcon, LegalIcon,
+  AlertDiamondIcon, ShieldCheck as ShieldCheckIcon, UserCircleIcon,
 } from "@hugeicons/core-free-icons"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { useDashboardStore, ReportType, DatePreset } from "@/store/dashboard-store"
@@ -20,22 +21,22 @@ const USERS_DATA = [210,240,220,260,280,270,320].map((v) => ({ v }))
 // ─── Live feed events ──────────────────────────────────────────────────────
 
 const FEED = [
-  { id:"f1", iconBg:"#EEF2FF", iconColor:"#6366F1", letter:"T",
+  { id:"f1", iconBg:"#EEF2FF", iconColor:"#6366F1", Icon: TaskDone01Icon,
     text: <>Task <strong>TG-4582</strong> posted by <strong>Arjun K.</strong></>,
     meta:"Cleaning · ₹1,500 · Mumbai", time:"just now" },
-  { id:"f2", iconBg:"#FEF2F2", iconColor:"#EF4444", letter:"D",
+  { id:"f2", iconBg:"#FEF2F2", iconColor:"#EF4444", Icon: AlertDiamondIcon,
     text: <>Dispute <strong>CASE-2892</strong> opened by <strong>Vikram S.</strong></>,
     meta:"₹2,400 · Mumbai", time:"2m ago" },
-  { id:"f3", iconBg:"#ECFDF5", iconColor:"#10B981", letter:"₹",
+  { id:"f3", iconBg:"#ECFDF5", iconColor:"#10B981", Icon: CreditCardIcon,
     text: <>Payout <strong>₹1,760</strong> to <strong>Diya M.</strong></>,
     meta:"UPI success · diya@oksbi", time:"4m ago" },
-  { id:"f4", iconBg:"#EFF6FF", iconColor:"#3B82F6", letter:"U",
+  { id:"f4", iconBg:"#EFF6FF", iconColor:"#3B82F6", Icon: UserCircleIcon,
     text: <>User signup <strong>Rohan G.</strong></>,
     meta:"Doer · Pune · referred by code AVN24", time:"5m ago" },
-  { id:"f5", iconBg:"#FFF7ED", iconColor:"#F97316", letter:"!",
+  { id:"f5", iconBg:"#FFF7ED", iconColor:"#F97316", Icon: UserMultiple02Icon,
     text: <>Trust signal</>,
     meta:"Device cluster detected (3 accounts) · auto-flagged for review", time:"9m ago" },
-  { id:"f6", iconBg:"#E8F7F3", iconColor:"#17B890", letter:"K",
+  { id:"f6", iconBg:"#E8F7F3", iconColor:"#17B890", Icon: ShieldCheckIcon,
     text: <>KYC verified <strong>Tanvi P.</strong></>,
     meta:"Aadhaar OCR 94% confidence · auto-approved", time:"11m ago" },
 ]
@@ -71,7 +72,7 @@ function ExportModal() {
     <AnimatePresence>
       {exportOpen && (
         <Dialog open={exportOpen} onOpenChange={setExportOpen}>
-          <DialogContent showCloseButton={false} className="sm:max-w-[580px] rounded-2xl p-0 overflow-hidden gap-0">
+          <DialogContent showCloseButton={false} className="sm:max-w-[580px] rounded-2xl p-0 overflow-hidden gap-0 bg-white dark:bg-[#1C1C22] border dark:border-[#26262E]">
             <motion.div
               initial={{ opacity:0, scale:0.97, y:8 }}
               animate={{ opacity:1, scale:1,    y:0 }}
@@ -79,47 +80,48 @@ function ExportModal() {
               transition={{ duration:0.18, ease:[0.33,1,0.68,1] }}
             >
               {/* Header */}
-              <div className="flex items-start justify-between px-6 pt-6 pb-5 border-b border-[#F3F4F6]">
+              <div className="flex items-start justify-between px-6 pt-6 pb-5 border-b border-[#F3F4F6] dark:border-[#26262E]">
                 <div>
-                  <h2 className="text-[17px] font-bold text-[#111827]">Export report</h2>
+                  <h2 className="text-[17px] font-bold text-[#111827] dark:text-[#E8E8E8]">Export report</h2>
                   <p className="text-[12.5px] text-[#8FA3A0] mt-0.5">Generate a custom data export with the selections below.</p>
                 </div>
-                <button onClick={() => setExportOpen(false)}
-                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] flex items-center justify-center text-[#8FA3A0] hover:text-[#374151] transition-colors mt-0.5">
+                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setExportOpen(false)}
+                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] flex items-center justify-center text-[#8FA3A0] transition-colors mt-0.5">
                   <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={2} />
-                </button>
+                </motion.button>
               </div>
 
               <div className="px-6 py-5 space-y-6 max-h-[65vh] overflow-y-auto">
                 {/* ── Date range ── */}
                 <div>
-                  <p className="text-[13px] font-semibold text-[#111827] mb-3">Date range</p>
+                  <p className="text-[13px] font-semibold text-[#111827] dark:text-[#E8E8E8] mb-3">Date range</p>
                   <div className="flex flex-wrap gap-2 mb-3">
                     {DATE_PRESETS.map((p) => (
-                      <button key={p} onClick={() => setDatePreset(p)}
+                      <motion.button key={p} whileTap={{ scale: 0.94 }} transition={{ duration: 0.1 }}
+                        onClick={() => setDatePreset(p)}
                         className={cn("h-8 px-3.5 rounded-full text-[12.5px] font-medium border transition-all",
                           datePreset === p
-                            ? "bg-[#111827] text-white border-[#111827]"
-                            : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#D1D5DB]"
+                            ? "bg-[#111827] dark:bg-[#17B890] text-white border-[#111827] dark:border-[#17B890]"
+                            : "bg-white dark:bg-[#141418] text-[#374151] dark:text-[#9BA1A6] border-[#E5E7EB] dark:border-[#26262E] hover:border-[#D1D5DB]"
                         )}>
                         {p}
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                   {/* Date display */}
-                  <div className="flex items-center gap-3 h-10 px-4 rounded-xl bg-[#F9FAFB] border border-[#E5E7EB] text-[12.5px]">
+                  <div className="flex items-center gap-3 h-10 px-4 rounded-xl bg-[#F9FAFB] dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] text-[12.5px]">
                     <HugeiconsIcon icon={Clock01Icon} size={14} strokeWidth={1.5} className="text-[#8FA3A0]" />
-                    <span className="font-semibold text-[#374151]">Apr 3, 2026</span>
+                    <span className="font-semibold text-[#374151] dark:text-[#9BA1A6]">Apr 3, 2026</span>
                     <span className="text-[#8FA3A0]">→</span>
-                    <span className="font-semibold text-[#374151]">May 2, 2026</span>
-                    <span className="text-[#D1D5DB] mx-1">|</span>
+                    <span className="font-semibold text-[#374151] dark:text-[#9BA1A6]">May 2, 2026</span>
+                    <span className="text-[#D1D5DB] dark:text-[#26262E] mx-1">|</span>
                     <span className="text-[#8FA3A0]">30 days · IST</span>
                   </div>
                 </div>
 
                 {/* ── Report type ── */}
                 <div>
-                  <p className="text-[13px] font-semibold text-[#111827] mb-3">Report type</p>
+                  <p className="text-[13px] font-semibold text-[#111827] dark:text-[#E8E8E8] mb-3">Report type</p>
                   <div className="space-y-2">
                     {REPORTS.map(({ id, Icon, label, desc }) => {
                       const active = reportType === id
@@ -132,21 +134,23 @@ function ExportModal() {
                           onClick={() => setReportType(id)}
                           className={cn(
                             "w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border text-left transition-all",
-                            active ? "border-[#111827] bg-white shadow-sm" : "border-[#E5E7EB] bg-white hover:border-[#D1D5DB] hover:bg-[#FAFAFA]"
+                            active
+                              ? "border-[#111827] dark:border-[#17B890] bg-white dark:bg-[#0A2A22] shadow-sm"
+                              : "border-[#E5E7EB] dark:border-[#26262E] bg-white dark:bg-[#141418] hover:border-[#D1D5DB] dark:hover:border-[#404048] hover:bg-[#FAFAFA] dark:hover:bg-[#1C1C22]"
                           )}>
                           <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-colors",
-                            active ? "bg-[#111827]" : "bg-[#F3F4F6]"
+                            active ? "bg-[#111827] dark:bg-[#17B890]" : "bg-[#F3F4F6] dark:bg-[#26262E]"
                           )}>
                             <HugeiconsIcon icon={Icon} size={16} strokeWidth={1.5} className={active ? "text-white" : "text-[#6B7280]"} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={cn("text-[13px] font-semibold", active ? "text-[#111827]" : "text-[#374151]")}>{label}</p>
+                            <p className={cn("text-[13px] font-semibold", active ? "text-[#111827] dark:text-[#E8E8E8]" : "text-[#374151] dark:text-[#9BA1A6]")}>{label}</p>
                             <p className="text-[11.5px] text-[#8FA3A0] leading-snug mt-0.5">{desc}</p>
                           </div>
                           <div className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
-                            active ? "border-[#111827]" : "border-[#D1D5DB]"
+                            active ? "border-[#111827] dark:border-[#17B890]" : "border-[#D1D5DB] dark:border-[#404048]"
                           )}>
-                            {active && <div className="w-2 h-2 rounded-full bg-[#111827]" />}
+                            {active && <div className="w-2 h-2 rounded-full bg-[#111827] dark:bg-[#17B890]" />}
                           </div>
                         </motion.button>
                       )
@@ -156,7 +160,7 @@ function ExportModal() {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] bg-[#F9FAFB]">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#141418]">
                 <div className="flex items-center gap-3 text-[12px] text-[#8FA3A0]">
                   <span className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#17B890]" />
@@ -166,15 +170,15 @@ function ExportModal() {
                   <span>ready in ~8s</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button onClick={() => setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] text-[12.5px] font-semibold text-[#374151] hover:bg-white transition-colors bg-[#F9FAFB]">
+                  <motion.button whileTap={{ scale: 0.97 }} onClick={() => setExportOpen(false)}
+                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] dark:border-[#26262E] text-[12.5px] font-semibold text-[#374151] dark:text-[#9BA1A6] hover:bg-white dark:hover:bg-[#26262E] transition-colors bg-[#F9FAFB] dark:bg-[#141418]">
                     Cancel
-                  </button>
-                  <button onClick={() => setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-colors">
+                  </motion.button>
+                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} onClick={() => setExportOpen(false)}
+                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] dark:bg-[#17B890] dark:hover:bg-[#15a47d] text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-colors">
                     <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={2} />
                     Generate report
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
@@ -192,7 +196,7 @@ function KpiCard({ children, className }: { children: React.ReactNode; className
     <motion.div
       whileHover={{ y:-1, boxShadow:"0 4px 12px rgba(0,0,0,0.06)" }}
       transition={{ duration:0.15 }}
-      className={cn("flex-1 bg-white border border-[#E5E7EB] rounded-xl p-5 flex flex-col min-w-0", className)}
+      className={cn("flex-1 bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl p-5 flex flex-col min-w-0", className)}
     >
       {children}
     </motion.div>
@@ -228,14 +232,14 @@ export default function DashboardPage() {
         className="flex items-start justify-between mb-6"
       >
         <div>
-          <h1 className="text-[22px] font-extrabold text-[#111827]">Good morning, Aarav 👋</h1>
+          <h1 className="text-[22px] font-extrabold text-[#111827] dark:text-[#E8E8E8]">Good morning, Aarav 👋</h1>
           <p className="text-[12px] text-[#8FA3A0] mt-0.5">Friday, May 1 · 9:42 AM IST</p>
         </div>
         <div className="flex items-center gap-2 mt-1">
           <motion.button
             whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
             onClick={() => setExportOpen(true)}
-            className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
+            className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] dark:border-[#26262E] rounded-lg text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] bg-white dark:bg-[#1C1C22] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] transition-colors"
           >
             <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />
             Export Report
@@ -243,9 +247,9 @@ export default function DashboardPage() {
           <motion.div whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}>
             <Link
               href="/live-feed"
-              className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors"
+              className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] dark:border-[#26262E] rounded-lg text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] bg-white dark:bg-[#1C1C22] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] transition-colors"
             >
-              <span className="w-2 h-2 rounded-full bg-[#17B890]" />
+              <span className="w-2 h-2 rounded-full bg-[#17B890] animate-pulse" />
               Live Feed
             </Link>
           </motion.div>
@@ -338,12 +342,12 @@ export default function DashboardPage() {
         className="grid grid-cols-5 gap-4"
       >
         {/* Live Feed — 3 cols */}
-        <div className="col-span-3 bg-white border border-[#E5E7EB] rounded-xl overflow-hidden">
+        <div className="col-span-3 bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#F3F4F6]">
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#F3F4F6] dark:border-[#26262E]">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#17B890]" />
-              <span className="text-[13px] font-bold text-[#111827]">Live Feed</span>
+              <span className="text-[13px] font-bold text-[#111827] dark:text-[#E8E8E8]">Live Feed</span>
             </div>
             <motion.div whileHover={{ opacity: 0.75 }} transition={{ duration: 0.12 }}>
               <Link href="/live-feed"
@@ -362,33 +366,33 @@ export default function DashboardPage() {
                 initial={{ opacity:0, x:-4 }}
                 animate={{ opacity:1, x:0 }}
                 transition={{ duration:0.18, delay: i * 0.04 }}
-                whileHover={{ x: 2, backgroundColor: "#FAFAFA" }}
-                className="flex items-center gap-3 px-5 py-3 border-b border-[#F9FAFB] last:border-0 transition-colors cursor-default"
+                whileHover={{ x: 2 }}
+                className="flex items-center gap-3 px-5 py-3 border-b border-[#F9FAFB] dark:border-[#1C1C22] last:border-0 cursor-default hover:bg-[#FAFAFA] dark:hover:bg-[#1C1C22] transition-colors"
               >
                 {/* Icon */}
                 <div
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-black shrink-0"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
                   style={{ backgroundColor: ev.iconBg, color: ev.iconColor }}
                 >
-                  {ev.letter}
+                  <HugeiconsIcon icon={ev.Icon} size={14} strokeWidth={1.5} />
                 </div>
                 {/* Text */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-[12px] text-[#374151] leading-snug">{ev.text}</p>
-                  <p className="text-[11px] text-[#8FA3A0] mt-0.5">{ev.meta}</p>
+                  <p className="text-[12px] text-[#374151] dark:text-[#C8C8D0] leading-snug">{ev.text}</p>
+                  <p className="text-[11px] text-[#8FA3A0] dark:text-[#6B7280] mt-0.5">{ev.meta}</p>
                 </div>
                 {/* Timestamp */}
-                <span className="text-[11px] text-[#8FA3A0] shrink-0 whitespace-nowrap">{ev.time}</span>
+                <span className="text-[11px] text-[#8FA3A0] dark:text-[#6B7280] shrink-0 whitespace-nowrap">{ev.time}</span>
               </motion.div>
             ))}
           </div>
         </div>
 
         {/* Top Cities — 2 cols */}
-        <div className="col-span-2 bg-white border border-[#E5E7EB] rounded-xl flex flex-col">
+        <div className="col-span-2 bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl flex flex-col">
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#F3F4F6]">
-            <span className="text-[13px] font-bold text-[#111827]">Top Cities · Today</span>
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#F3F4F6] dark:border-[#26262E]">
+            <span className="text-[13px] font-bold text-[#111827] dark:text-[#E8E8E8]">Top Cities · Today</span>
             <button className="text-[11.5px] font-semibold text-[#8FA3A0] hover:text-[#17B890] transition-colors flex items-center gap-0.5">
               Drill in <HugeiconsIcon icon={ArrowRight01Icon} size={11} strokeWidth={2} />
             </button>
@@ -404,12 +408,12 @@ export default function DashboardPage() {
                 transition={{ duration:0.2, delay: 0.1 + i * 0.05 }}
               >
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[12px] font-semibold text-[#374151]">{c.city}</span>
-                  <span className="text-[11px] font-bold text-[#111827] whitespace-nowrap">
+                  <span className="text-[12px] font-semibold text-[#374151] dark:text-[#C8C8D0]">{c.city}</span>
+                  <span className="text-[11px] font-bold text-[#111827] dark:text-[#E8E8E8] whitespace-nowrap">
                     {c.amount} | {c.tasks}
                   </span>
                 </div>
-                <div className="h-1.5 bg-[#F3F4F6] rounded-full overflow-hidden">
+                <div className="h-1.5 bg-[#F3F4F6] dark:bg-[#26262E] rounded-full overflow-hidden">
                   <AnimatedBar pct={c.pct} color="#17B890" delay={0.2 + i * 0.06} />
                 </div>
               </motion.div>
@@ -417,7 +421,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Bottom metrics 2×2 */}
-          <div className="border-t border-[#F3F4F6] px-5 py-4 grid grid-cols-2 gap-x-4 gap-y-3">
+          <div className="border-t border-[#F3F4F6] dark:border-[#26262E] px-5 py-4 grid grid-cols-2 gap-x-4 gap-y-3">
             {[
               { label:"COMPLETION RATE", value:"87.3%" },
               { label:"AVG TASK VALUE",  value:"₹2,140" },
@@ -426,7 +430,7 @@ export default function DashboardPage() {
             ].map((s) => (
               <div key={s.label}>
                 <p className="text-[9px] font-black tracking-widest text-[#8FA3A0] uppercase mb-0.5">{s.label}</p>
-                <p className="text-[15px] font-extrabold text-[#111827]">{s.value}</p>
+                <p className="text-[15px] font-extrabold text-[#111827] dark:text-[#E8E8E8]">{s.value}</p>
               </div>
             ))}
           </div>

@@ -45,7 +45,7 @@ export function UserDropdown({ direction = "up", className }: UserDropdownProps)
       {/* ── Trigger ── */}
       <button
         onClick={() => setOpen((p) => !p)}
-        className="flex items-center gap-2.5 w-full px-2 py-2 rounded-xl hover:bg-[#F5F8F7] transition-colors group"
+        className="flex items-center gap-2.5 w-full px-2 py-2 rounded-xl hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] transition-colors group"
       >
         <Avatar size={32} />
         <div className="flex-1 min-w-0 text-left">
@@ -64,13 +64,13 @@ export function UserDropdown({ direction = "up", className }: UserDropdownProps)
       {/* ── Dropdown panel ── */}
       {open && (
         <div className={cn(
-          "absolute left-0 right-0 z-50 bg-white rounded-xl border border-[#E5E7EB] shadow-lg overflow-hidden",
+          "absolute left-0 right-0 z-50 bg-white dark:bg-[#141418] rounded-xl border border-[#E5E7EB] dark:border-[#26262E] shadow-lg dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden",
           direction === "up"
             ? "bottom-full mb-2"
             : "top-full mt-2"
         )}>
           {/* User info header */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F3F4F6] bg-[#F9FAFB]">
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#1C1C22]">
             <Avatar size={36} />
             <div>
               <p className="text-[12.5px] font-bold text-[#111827]">Aarav Sharma</p>
@@ -87,19 +87,19 @@ export function UserDropdown({ direction = "up", className }: UserDropdownProps)
               <button
                 key={label}
                 onClick={() => { action(); setOpen(false) }}
-                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-left text-[12.5px] font-medium text-[#374151] hover:bg-[#F5F8F7] transition-colors"
+                className="flex items-center gap-2.5 w-full px-4 py-2.5 text-left text-[12.5px] font-medium text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] transition-colors"
               >
-                <HugeiconsIcon icon={icon} size={14} strokeWidth={1.5} className="text-[#6B7280] shrink-0" />
+                <HugeiconsIcon icon={icon} size={14} strokeWidth={1.5} className="text-[#6B7280] dark:text-[#6B7280] shrink-0" />
                 {label}
               </button>
             ))}
           </div>
 
           {/* Divider + Logout */}
-          <div className="border-t border-[#F3F4F6] py-1">
+          <div className="border-t border-[#F3F4F6] dark:border-[#26262E] py-1">
             <button
               onClick={() => { setOpen(false); router.push("/login") }}
-              className="flex items-center gap-2.5 w-full px-4 py-2.5 text-left text-[12.5px] font-medium text-[#DC2626] hover:bg-[#FEF2F2] transition-colors"
+              className="flex items-center gap-2.5 w-full px-4 py-2.5 text-left text-[12.5px] font-medium text-[#DC2626] dark:text-[#F87171] hover:bg-[#FEF2F2] dark:hover:bg-[#2A1212] transition-colors"
             >
               <HugeiconsIcon icon={Logout01Icon} size={14} strokeWidth={1.5} className="shrink-0" />
               Log out

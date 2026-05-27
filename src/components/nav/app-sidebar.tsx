@@ -33,7 +33,15 @@ function AsteriskIcon({ className }: { className?: string }) {
 
 // ─── Nav data ──────────────────────────────────────────────────────────────
 
-// No badges in sidebar — badges only appear on the Module Home cards
+// Badge counts — "alert" badges get red circles, "count" badges get gray text
+const NAV_BADGES: Record<string, { count: number; alert: boolean }> = {
+  "/users":         { count: 47, alert: true  },
+  "/tasks":         { count: 12, alert: false },
+  "/disputes":      { count: 8,  alert: true  },
+  "/payments":      { count: 3,  alert: true  },
+  "/support":       { count: 31, alert: false },
+}
+
 const WORKSPACE = [
   { label:"Dashboard",    href:"/dashboard",      icon:DashboardSquare01Icon },
   { label:"Users",        href:"/users",           icon:UserMultiple02Icon    },
@@ -77,31 +85,49 @@ export function AppSidebar() {
       </div>
 
       {/* ── Nav items ── */}
-      <div className="flex-1 overflow-y-auto px-3 py-3">
+      <div className="flex-1 overflow-y-auto pr-3 py-3">
         {/* WORKSPACE */}
-        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] dark:text-[#6B7280] uppercase px-2 mb-2">Workspace</p>
+        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] dark:text-[#6B7280] uppercase pl-5 pr-2 mb-2">Workspace</p>
         <ul className="space-y-0.5 mb-4">
           {WORKSPACE.map((item) => {
-            const on = active(item.href)
+            const on    = active(item.href)
+            const badge = NAV_BADGES[item.href]
             return (
-              <motion.li key={item.href} whileTap={{ scale: 0.97 }}>
+              <motion.li key={item.href}
+                whileHover={!on ? { x: 2 } : {}}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.14 }}
+                className="relative pl-3">
+                {on && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#17B890] rounded-r-full" />
+                )}
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
+                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] transition-all duration-150",
                     on
-                      ? "bg-[#E8F7F3] dark:bg-[#0A2A22] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8] dark:shadow-[inset_0_0_0_1px_#1A4035]"
-                      : "text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] hover:text-[#111827] dark:hover:text-[#E8E8E8]"
+                      ? "bg-[#E8F7F3] dark:bg-[#0A2A22] text-[#111827] dark:text-[#E8E8E8] font-bold"
+                      : "font-medium text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] hover:text-[#111827] dark:hover:text-[#E8E8E8]"
                   )}
                 >
                   <HugeiconsIcon
                     icon={item.icon}
                     size={16}
                     strokeWidth={on ? 2 : 1.5}
-                    className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0 dark:text-[#6B7280]"}
+                    className={cn("shrink-0", on ? "text-[#17B890]" : "text-[#6B7280] dark:text-[#6B7280]")}
                   />
                   <span className="flex-1 leading-tight">{item.label}</span>
-                  {on && <span className="w-1 h-1 rounded-full bg-[#17B890] shrink-0" />}
+                  {badge && (
+                    badge.alert ? (
+                      <span className="min-w-[18px] h-[18px] rounded-full bg-[#EF4444] text-white text-[9.5px] font-black flex items-center justify-center px-[3px] shrink-0 leading-none tabular-nums">
+                        {badge.count}
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-semibold text-[#9CA3AF] dark:text-[#6B7280] shrink-0">
+                        {badge.count}
+                      </span>
+                    )
+                  )}
                 </Link>
               </motion.li>
             )
@@ -109,29 +135,47 @@ export function AppSidebar() {
         </ul>
 
         {/* PLATFORM */}
-        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] dark:text-[#6B7280] uppercase px-2 mb-2">Platform</p>
+        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] dark:text-[#6B7280] uppercase pl-5 pr-2 mb-2">Platform</p>
         <ul className="space-y-0.5">
           {PLATFORM.map((item) => {
-            const on = active(item.href)
+            const on    = active(item.href)
+            const badge = NAV_BADGES[item.href]
             return (
-              <motion.li key={item.href} whileTap={{ scale: 0.97 }}>
+              <motion.li key={item.href}
+                whileHover={!on ? { x: 2 } : {}}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.14 }}
+                className="relative pl-3">
+                {on && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-[#17B890] rounded-r-full" />
+                )}
                 <Link
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
+                    "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] transition-all duration-150",
                     on
-                      ? "bg-[#E8F7F3] dark:bg-[#0A2A22] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8] dark:shadow-[inset_0_0_0_1px_#1A4035]"
-                      : "text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] hover:text-[#111827] dark:hover:text-[#E8E8E8]"
+                      ? "bg-[#E8F7F3] dark:bg-[#0A2A22] text-[#111827] dark:text-[#E8E8E8] font-bold"
+                      : "font-medium text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] hover:text-[#111827] dark:hover:text-[#E8E8E8]"
                   )}
                 >
                   <HugeiconsIcon
                     icon={item.icon}
                     size={16}
                     strokeWidth={on ? 2 : 1.5}
-                    className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0"}
+                    className={cn("shrink-0", on ? "text-[#17B890]" : "text-[#6B7280] dark:text-[#6B7280]")}
                   />
-                  <span className="leading-tight">{item.label}</span>
-                  {on && <span className="w-1 h-1 rounded-full bg-[#17B890] ml-auto shrink-0" />}
+                  <span className="flex-1 leading-tight">{item.label}</span>
+                  {badge && (
+                    badge.alert ? (
+                      <span className="min-w-[18px] h-[18px] rounded-full bg-[#EF4444] text-white text-[9.5px] font-black flex items-center justify-center px-[3px] shrink-0 leading-none tabular-nums">
+                        {badge.count}
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-semibold text-[#9CA3AF] dark:text-[#6B7280] shrink-0">
+                        {badge.count}
+                      </span>
+                    )
+                  )}
                 </Link>
               </motion.li>
             )

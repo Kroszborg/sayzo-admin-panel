@@ -36,6 +36,14 @@ const KPI = [
 
 const ROLE_TABS: RoleTab[] = ["All members","Super Admin","Admin","Support Agent","Viewer"]
 
+const TAB_LABEL: Record<string, string> = {
+  "All members":  "All members",
+  "Super Admin":  "Super Admins",
+  "Admin":        "Admins",
+  "Support Agent":"Agents",
+  "Viewer":       "Viewers",
+}
+
 // ─── Member Card ───────────────────────────────────────────────────────────
 
 function MemberCard({ member }: { member: typeof MOCK_TEAM[0] }) {
@@ -54,10 +62,8 @@ function MemberCard({ member }: { member: typeof MOCK_TEAM[0] }) {
       {/* Avatar + name */}
       <div className="flex items-start gap-3">
         <div className="relative shrink-0">
-          <div className={cn("w-11 h-11 rounded-full flex items-center justify-center text-[13px] font-bold", rs.bg)}>
-            <span style={{ color: rs.badge.includes("9333EA") ? "#9333EA" : rs.badge.includes("17B890") ? "#17B890" : "#374151" }}>
-              {member.name.split(" ").map(n => n[0]).join("")}
-            </span>
+          <div className="w-11 h-11 rounded-full bg-[#E5E7EB] flex items-center justify-center text-[13px] font-bold text-[#374151]">
+            {member.name.split(" ").map(n => n[0]).join("")}
           </div>
           {/* Online dot */}
           <div className={cn(
@@ -150,7 +156,7 @@ export default function TeamPage() {
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
                 s.activeTab === t ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
               )}>
-              {t}
+              {TAB_LABEL[t] ?? t}
             </motion.button>
           ))}
         </div>

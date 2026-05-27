@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Download01Icon, Cancel01Icon, Clock01Icon, TaskDone01Icon,
-  LegalIcon, CreditCardIcon, UserMultiple02Icon, ShieldIcon, ChartIcon,
+  LegalIcon, CreditCardIcon, UserMultiple02Icon, ShieldIcon,
 } from "@hugeicons/core-free-icons"
 import { ExportFeedModal } from "@/components/shared/export-modal"
 import { useLiveFeedStore, FeedFilter, Severity } from "@/store/live-feed-store"
@@ -40,7 +40,6 @@ export type LiveEvent = {
   chips: string[]
   actions: { label: string; dark: boolean }[]
   time: string
-  // detail panel
   detail: {
     caseId: string; amount: string; category: string; city: string
     filedBy: string; linkedTask: string
@@ -83,7 +82,6 @@ const EVENTS: LiveEvent[] = [
   {
     id:"ev-3", category:"Users",
     type:"USER", typeColor:"#2563EB", typeBg:"#DBEAFE",
-    sev:"INFO",  sevColor:"#2563EB", sevBg:"#DBEAFE",
     severity:"all",
     iconBg:"#DBEAFE", iconColor:"#2563EB", Icon:UserMultiple02Icon,
     title:"New user signed up — Rohan Desai",
@@ -113,7 +111,6 @@ const EVENTS: LiveEvent[] = [
   {
     id:"ev-5", category:"Payments",
     type:"PAYMENT",  typeColor:"#16A34A", typeBg:"#DCFCE7",
-    sev:"INFO",      sevColor:"#2563EB",  sevBg:"#DBEAFE",
     severity:"all",
     iconBg:"#DCFCE7", iconColor:"#16A34A", Icon:CreditCardIcon,
     title:"Escrow released to doer",
@@ -128,7 +125,6 @@ const EVENTS: LiveEvent[] = [
   {
     id:"ev-6", category:"Tasks",
     type:"TASK",  typeColor:"#4F46E5", typeBg:"#E0E7FF",
-    sev:"INFO",   sevColor:"#2563EB",  sevBg:"#DBEAFE",
     severity:"all",
     iconBg:"#E0E7FF", iconColor:"#4F46E5", Icon:TaskDone01Icon,
     title:"Task force-closed by admin",
@@ -142,7 +138,7 @@ const EVENTS: LiveEvent[] = [
   },
 ]
 
-// ─── Category → matches EVENTS ─────────────────────────────────────────────
+// ─── matchesFilter ─────────────────────────────────────────────────────────
 
 function matchesFilter(ev: LiveEvent, filter: FeedFilter, sev: Severity): boolean {
   if (filter !== "All Events" && ev.category !== filter) return false
@@ -155,7 +151,12 @@ function matchesFilter(ev: LiveEvent, filter: FeedFilter, sev: Severity): boolea
 
 // ─── FeedCard ─────────────────────────────────────────────────────────────
 
-function FeedCard({ ev, selected, onSelect }: { ev: LiveEvent; selected: boolean; onSelect: () => void }) {
+function FeedCard({
+  ev, selected, onSelect, isFirst, isLast,
+}: {
+  ev: LiveEvent; selected: boolean; onSelect: () => void
+  isFirst: boolean; isLast: boolean
+}) {
   return (
     <motion.div
       layout
@@ -164,20 +165,34 @@ function FeedCard({ ev, selected, onSelect }: { ev: LiveEvent; selected: boolean
       exit={{ opacity:0, y:-4 }}
       transition={{ duration:0.18 }}
       onClick={onSelect}
-      whileHover={{ y:-1 }}
+      whileHover={!selected ? { y:-1 } : {}}
       className={cn(
-        "bg-white border rounded-xl mb-3 cursor-pointer transition-colors overflow-hidden",
+        "relative bg-white dark:bg-[#141418] rounded-xl mb-3 cursor-pointer transition-all border-2",
         selected
-          ? "border-[#17B890] shadow-sm ring-1 ring-[#17B890]/15"
-          : "border-[#E5E7EB] hover:border-[#D1D5DB] hover:shadow-sm"
+          ? "border-[#111827] dark:border-[#D1D5DB] shadow-md"
+          : "border-[#E5E7EB] dark:border-[#26262E] hover:border-[#D1D5DB] dark:hover:border-[#3A3A44] hover:shadow-sm"
       )}
-      style={{ borderLeftWidth:3, borderLeftColor: ev.iconColor }}
     >
-      <div className="flex gap-3.5 p-4">
-        {/* Icon node */}
-        <div className="flex flex-col items-center shrink-0 pt-0.5">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-black"
-            style={{ backgroundColor: ev.iconBg, color: ev.iconColor }}>
+      {/* Selected right-side indicator tab */}
+      {selected && (
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-8 bg-[#111827] dark:bg-[#E8E8E8] rounded-l-sm z-10" />
+      )}
+
+      <div className="flex gap-3.5 p-4 pl-5">
+        {/* Icon with timeline spine */}
+        <div className="shrink-0 relative flex flex-col items-center self-stretch" style={{ width: 32 }}>
+          {/* Vertical spine — extends above card for non-first, below for non-last */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 w-px bg-[#E5E7EB] dark:bg-[#26262E]"
+            style={{
+              top: isFirst ? '18px' : '-12px',
+              bottom: isLast ? '18px' : '-12px',
+            }}
+          />
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 relative z-10 mt-0.5"
+            style={{ backgroundColor: ev.iconBg, color: ev.iconColor }}
+          >
             <HugeiconsIcon icon={ev.Icon} size={15} strokeWidth={1.5} />
           </div>
         </div>
@@ -185,22 +200,26 @@ function FeedCard({ ev, selected, onSelect }: { ev: LiveEvent; selected: boolean
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-            <span className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded"
-              style={{ backgroundColor: ev.typeBg, color: ev.typeColor }}>{ev.type}</span>
+            <span
+              className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded"
+              style={{ backgroundColor: ev.typeBg, color: ev.typeColor }}
+            >{ev.type}</span>
             {ev.sev && (
-              <span className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded"
-                style={{ backgroundColor: ev.sevBg, color: ev.sevColor }}>{ev.sev}</span>
+              <span
+                className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded"
+                style={{ backgroundColor: ev.sevBg, color: ev.sevColor }}
+              >{ev.sev}</span>
             )}
             <span className="ml-auto text-[11px] text-[#8FA3A0] whitespace-nowrap shrink-0">{ev.time}</span>
           </div>
 
-          <p className="text-[13px] font-bold text-[#111827] mb-1 leading-snug">{ev.title}</p>
-          <p className="text-[12px] text-[#6B7280] leading-relaxed mb-3">{ev.desc}</p>
+          <p className="text-[13px] font-bold text-[#111827] dark:text-[#E8E8E8] mb-1 leading-snug">{ev.title}</p>
+          <p className="text-[12px] text-[#6B7280] dark:text-[#9BA1A6] leading-relaxed mb-3">{ev.desc}</p>
 
           {ev.chips.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-3">
               {ev.chips.map((c) => (
-                <span key={c} className="text-[11px] text-[#374151] bg-[#F9FAFB] border border-[#E5E7EB] rounded-md px-2 py-0.5 font-medium">{c}</span>
+                <span key={c} className="text-[11px] text-[#374151] dark:text-[#9BA1A6] bg-[#F9FAFB] dark:bg-[#1C1C22] border border-[#E5E7EB] dark:border-[#26262E] rounded-md px-2 py-0.5 font-medium">{c}</span>
               ))}
             </div>
           )}
@@ -208,11 +227,17 @@ function FeedCard({ ev, selected, onSelect }: { ev: LiveEvent; selected: boolean
           {ev.actions.length > 0 && (
             <div className="flex items-center gap-2">
               {ev.actions.map((a) => (
-                <motion.button key={a.label} whileTap={{ scale: 0.95 }}
+                <motion.button
+                  key={a.label}
+                  whileTap={{ scale: 0.95 }}
                   onClick={(e) => e.stopPropagation()}
-                  className={cn("h-7 px-3 rounded-lg text-[11px] font-semibold transition-colors",
-                    a.dark ? "bg-[#111827] text-white hover:bg-[#1f2937]" : "border border-[#E5E7EB] text-[#374151] hover:bg-[#F5F8F7]"
-                  )}>{a.label}</motion.button>
+                  className={cn(
+                    "h-7 px-3 rounded-lg text-[11px] font-semibold transition-colors",
+                    a.dark
+                      ? "bg-[#111827] dark:bg-[#17B890] text-white hover:bg-[#1f2937] dark:hover:bg-[#15a47d]"
+                      : "border border-[#E5E7EB] dark:border-[#26262E] text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E]"
+                  )}
+                >{a.label}</motion.button>
               ))}
             </div>
           )}
@@ -224,19 +249,19 @@ function FeedCard({ ev, selected, onSelect }: { ev: LiveEvent; selected: boolean
 
 // ─── Detail panel ──────────────────────────────────────────────────────────
 
-function DetailPanel({ ev }: { ev: LiveEvent }) {
+function DetailPanel({ ev, onClose }: { ev: LiveEvent; onClose: () => void }) {
   const router = useRouter()
   return (
     <motion.div
       key={ev.id}
-      initial={{ opacity:0, x:8 }}
+      initial={{ opacity:0, x:12 }}
       animate={{ opacity:1, x:0 }}
-      transition={{ duration:0.18 }}
-      className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden flex flex-col"
-      style={{ maxHeight:"calc(100vh - 280px)" }}
+      exit={{ opacity:0, x:12 }}
+      transition={{ duration:0.2, ease:[0.33,1,0.68,1] }}
+      className="bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl overflow-hidden flex flex-col h-full"
     >
       {/* Header */}
-      <div className="flex items-start justify-between px-4 py-3 border-b border-[#F3F4F6]">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E] shrink-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-[9px] font-black tracking-wider uppercase px-1.5 py-0.5 rounded"
             style={{ backgroundColor: ev.typeBg, color: ev.typeColor }}>{ev.type}</span>
@@ -245,15 +270,20 @@ function DetailPanel({ ev }: { ev: LiveEvent }) {
               style={{ backgroundColor: ev.sevBg, color: ev.sevColor }}>{ev.sev}</span>
           )}
         </div>
-        <div className="w-5 h-5 rounded flex items-center justify-center text-[#8FA3A0] hover:bg-[#F5F8F7] cursor-pointer">
-          <HugeiconsIcon icon={Cancel01Icon} size={11} strokeWidth={2} />
-        </div>
+        <motion.button
+          whileHover={{ scale: 1.15, backgroundColor: "#F3F4F6" }}
+          whileTap={{ scale: 0.9 }}
+          onClick={onClose}
+          className="w-6 h-6 rounded-lg flex items-center justify-center text-[#6B7280] dark:text-[#9BA1A6] dark:hover:bg-[#26262E] cursor-pointer transition-colors shrink-0"
+        >
+          <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} />
+        </motion.button>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {/* Title + time */}
-        <div className="px-4 py-3 border-b border-[#F3F4F6]">
-          <p className="text-[13px] font-bold text-[#111827] leading-snug mb-1">{ev.title}</p>
+        <div className="px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E]">
+          <p className="text-[13px] font-bold text-[#111827] dark:text-[#E8E8E8] leading-snug mb-1">{ev.title}</p>
           <p className="text-[11px] text-[#8FA3A0] flex items-center gap-1">
             <HugeiconsIcon icon={Clock01Icon} size={11} strokeWidth={1.5} />
             {ev.time} · 2 May 2026, 14:32 IST
@@ -261,7 +291,7 @@ function DetailPanel({ ev }: { ev: LiveEvent }) {
         </div>
 
         {/* Event data */}
-        <div className="px-4 py-3 border-b border-[#F3F4F6]">
+        <div className="px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E]">
           <p className="text-[9px] font-black tracking-[0.15em] text-[#8FA3A0] uppercase mb-3">Event Data</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
             {[
@@ -274,28 +304,29 @@ function DetailPanel({ ev }: { ev: LiveEvent }) {
             ].map(({ k, v }) => (
               <div key={k}>
                 <p className="text-[10px] text-[#8FA3A0]">{k}</p>
-                <p className="text-[11.5px] font-semibold text-[#374151]">{v}</p>
+                <p className="text-[11.5px] font-semibold text-[#374151] dark:text-[#9BA1A6]">{v}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Parties */}
-        <div className="px-4 py-3 border-b border-[#F3F4F6]">
+        <div className="px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E]">
           <p className="text-[9px] font-black tracking-[0.15em] text-[#8FA3A0] uppercase mb-3">Parties Involved</p>
           {ev.detail.parties.map((p) => (
-            <div key={p.name} className="flex items-center gap-2.5 mb-2 p-2.5 rounded-xl bg-[#F9FAFB] border border-[#F3F4F6]">
-              <div className="w-8 h-8 rounded-full bg-[#E8F7F3] flex items-center justify-center text-[10px] font-bold text-[#17B890] shrink-0">
+            <motion.div key={p.name} whileHover={{ scale: 1.01 }} transition={{ duration: 0.1 }}
+              className="flex items-center gap-2.5 mb-2 p-2.5 rounded-xl bg-[#F9FAFB] dark:bg-[#1C1C22] border border-[#F3F4F6] dark:border-[#26262E]">
+              <div className="w-8 h-8 rounded-full bg-[#E8F7F3] dark:bg-[#0A2A22] flex items-center justify-center text-[10px] font-bold text-[#17B890] shrink-0">
                 {p.name.split(" ").map(n=>n[0]).join("")}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[12px] font-semibold text-[#374151] truncate">{p.name}</p>
+                <p className="text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] truncate">{p.name}</p>
                 <p className="text-[10px] text-[#8FA3A0]">{p.role}</p>
               </div>
               {p.score > 0 && (
                 <span className="text-[13px] font-extrabold shrink-0" style={{ color: p.scoreColor }}>{p.score}</span>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
 
@@ -308,17 +339,19 @@ function DetailPanel({ ev }: { ev: LiveEvent }) {
                 <HugeiconsIcon icon={Clock01Icon} size={11} strokeWidth={1.5} />
                 {label}
               </span>
-              <span className={cn("text-[11px] font-bold", red ? "text-[#EF4444]" : "text-[#374151]")}>{value}</span>
+              <span className={cn("text-[11px] font-bold", red ? "text-[#EF4444]" : "text-[#374151] dark:text-[#9BA1A6]")}>{value}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* CTA */}
-      <div className="p-4 border-t border-[#F3F4F6] shrink-0">
-        <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
+      <div className="p-4 border-t border-[#F3F4F6] dark:border-[#26262E] shrink-0">
+        <motion.button
+          whileHover={{ scale: 1.015 }}
+          whileTap={{ scale: 0.97 }}
           onClick={() => router.push("/disputes")}
-          className="w-full h-10 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors"
+          className="w-full h-10 rounded-xl bg-[#111827] dark:bg-[#17B890] hover:bg-[#1f2937] dark:hover:bg-[#15a47d] text-white text-[12.5px] font-bold flex items-center justify-center gap-2 transition-colors"
         >
           Open full case →
         </motion.button>
@@ -336,21 +369,25 @@ export default function LiveFeedPage() {
   } = useLiveFeedStore()
 
   const visible = EVENTS.filter((ev) => matchesFilter(ev, activeFilter, severity))
-  const selectedEv = visible.find((e) => e.id === selectedEventId) ?? EVENTS[0]
+  const selectedEv = selectedEventId
+    ? (visible.find((e) => e.id === selectedEventId) ?? null)
+    : null
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       {/* Page heading */}
-      <div className="flex items-start justify-between mb-5">
+      <div className="flex items-start justify-between mb-5 shrink-0">
         <div>
-          <h1 className="text-[20px] font-extrabold text-[#111827]">Live Feed</h1>
+          <h1 className="text-[20px] font-extrabold text-[#111827] dark:text-[#E8E8E8]">Live Feed</h1>
           <p className="text-[12px] text-[#8FA3A0] mt-0.5">Real-time platform activity across all modules</p>
         </div>
         <div className="flex items-center gap-2">
           <span className="flex items-center gap-1.5 h-8 px-3 rounded-full bg-[#E8F7F3] text-[#17B890] text-[11px] font-bold border border-[#A8DFD0]">
             <span className="w-2 h-2 rounded-full bg-[#17B890] animate-pulse" />LIVE
           </span>
-          <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
+          <motion.button
+            whileHover={{ scale: 1.015 }}
+            whileTap={{ scale: 0.97 }}
             onClick={() => setExportOpen(true)}
             className="flex items-center gap-1.5 h-8 px-3 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[11px] font-bold transition-colors"
           >
@@ -360,17 +397,20 @@ export default function LiveFeedPage() {
         </div>
       </div>
 
-      {/* Filter tabs */}
-      <div className="flex items-center gap-2 mb-4 flex-wrap">
+      {/* Category filter tabs */}
+      <div className="flex items-center gap-2 mb-4 flex-wrap shrink-0">
         {FILTER_TABS.map((f) => (
-          <motion.button key={f.id} whileTap={{ scale: 0.96 }}
+          <motion.button
+            key={f.id}
+            whileTap={{ scale: 0.96 }}
             onClick={() => setFilter(f.id)}
             className={cn(
               "flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[12px] font-medium border transition-colors whitespace-nowrap",
               activeFilter === f.id
                 ? "bg-[#111827] text-white border-[#111827]"
-                : "bg-white text-[#374151] border-[#E2E8E6] hover:bg-[#F5F8F7]"
-            )}>
+                : "bg-white dark:bg-[#1C1C22] text-[#374151] dark:text-[#9BA1A6] border-[#E2E8E6] dark:border-[#26262E] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E]"
+            )}
+          >
             {f.id}
             <span className={cn("text-[10px] font-bold", activeFilter === f.id ? "text-white/60" : "text-[#8FA3A0]")}>
               {f.count.toLocaleString()}
@@ -379,31 +419,54 @@ export default function LiveFeedPage() {
         ))}
       </div>
 
-      {/* 2-col layout */}
-      <div className="flex gap-4" style={{ minHeight:"calc(100vh - 280px)" }}>
-        {/* Feed */}
-        <div className="flex-1 overflow-y-auto">
+      {/* 2-col layout — flex-1 min-h-0 fills remaining height */}
+      <div className="flex gap-4 flex-1 min-h-0">
+        {/* Feed list */}
+        <div className="flex-1 overflow-y-auto pr-1 pb-2">
           <AnimatePresence mode="popLayout">
-            {visible.map((ev) => (
-              <FeedCard key={ev.id} ev={ev} selected={selectedEventId === ev.id} onSelect={() => setSelectedEvent(ev.id)} />
+            {visible.map((ev, i) => (
+              <FeedCard
+                key={ev.id}
+                ev={ev}
+                selected={selectedEventId === ev.id}
+                onSelect={() => setSelectedEvent(selectedEventId === ev.id ? null : ev.id)}
+                isFirst={i === 0}
+                isLast={i === visible.length - 1}
+              />
             ))}
           </AnimatePresence>
           {visible.length === 0 && (
             <div className="flex flex-col items-center justify-center py-24 text-[#8FA3A0]">
               <p className="text-[14px] font-semibold">No events match the current filter</p>
-              <motion.button whileTap={{ scale: 0.97 }}
+              <motion.button
+                whileTap={{ scale: 0.97 }}
                 onClick={() => { setFilter("All Events"); setSeverity("all") }}
-                className="mt-3 text-[12px] text-[#17B890] hover:underline font-semibold">
+                className="mt-3 text-[12px] text-[#17B890] hover:underline font-semibold"
+              >
                 Clear filters
               </motion.button>
             </div>
           )}
         </div>
 
-        {/* Right detail */}
-        <div className="w-[280px] shrink-0">
-          {selectedEv && <DetailPanel ev={selectedEv} />}
-        </div>
+        {/* Right detail panel — collapsible */}
+        <AnimatePresence mode="wait">
+          {selectedEv && (
+            <motion.div
+              key="detail-panel-wrap"
+              initial={{ opacity: 0, width: 0, marginLeft: 0 }}
+              animate={{ opacity: 1, width: 320 }}
+              exit={{ opacity: 0, width: 0, marginLeft: 0 }}
+              transition={{ duration: 0.22, ease: [0.33,1,0.68,1] }}
+              className="shrink-0 overflow-hidden pb-2"
+              style={{ minWidth: 0 }}
+            >
+              <div className="w-[320px] h-full">
+                <DetailPanel ev={selectedEv} onClose={() => setSelectedEvent(null)} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <ExportFeedModal open={exportOpen} onClose={() => setExportOpen(false)} />

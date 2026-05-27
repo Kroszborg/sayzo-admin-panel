@@ -1,10 +1,11 @@
 "use client"
 
 import { useEffect } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
-  UserMultiple02Icon, SentIcon, CheckmarkCircle02Icon, Cancel01Icon,
+  UserMultiple02Icon, SentIcon, CheckmarkCircle02Icon,
 } from "@hugeicons/core-free-icons"
 import { useCommsStore } from "@/store/comms-store"
 import { cn } from "@/lib/utils"
@@ -12,11 +13,9 @@ import { cn } from "@/lib/utils"
 // ─── Audience segments ─────────────────────────────────────────────────────
 
 const AUDIENCES = [
-  { id:"all"      as const, label:"All Users",     count:"8,241 users",  desc:"Every registered user on the platform"    },
-  { id:"new"      as const, label:"New Users",     count:"812 users",    desc:"Joined in the last 30 days"               },
-  { id:"inactive" as const, label:"Inactive",      count:"1,340 users",  desc:"No activity in 14+ days"                  },
-  { id:"doers"    as const, label:"Task Doers",    count:"18,204 users", desc:"All users registered as task doers"        },
-  { id:"givers"   as const, label:"Task Givers",   count:"6,613 users",  desc:"All users registered as task givers"       },
+  { id:"all"      as const, label:"All Users",  count:"8,241 users",  desc:"Every registered user on the platform" },
+  { id:"new"      as const, label:"New Users",  count:"812 users",    desc:"Joined in the last 30 days"            },
+  { id:"inactive" as const, label:"Inactive",   count:"1,340 users",  desc:"No activity in 14+ days"               },
 ]
 
 export default function BroadcastPage() {
@@ -37,6 +36,26 @@ export default function BroadcastPage() {
   const canSend = s.selectedAudiences.size > 0 && s.broadcastTitle.trim() && s.broadcastBody.trim() && !s.bcastSending
 
   return (
+    <div>
+      {/* ── Page header ── */}
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <h1 className="text-[20px] font-extrabold text-[#111827] dark:text-[#E8E8E8]">Broadcast</h1>
+          <p className="text-[12px] text-[#8FA3A0] mt-0.5">Compose and send a message to your user segments.</p>
+        </div>
+        {/* Live Support | Broadcast tab toggle */}
+        <div className="flex items-center border border-[#E5E7EB] rounded-lg overflow-hidden shrink-0">
+          <Link href="/communications/live-support"
+            className="flex items-center h-8 px-4 text-[12px] font-medium text-[#374151] hover:bg-[#F5F8F7] transition-colors">
+            Live Support
+          </Link>
+          <Link href="/communications/broadcast"
+            className="flex items-center h-8 px-4 text-[12px] font-bold bg-[#111827] text-white">
+            Broadcast
+          </Link>
+        </div>
+      </div>
+
     <div className="max-w-2xl space-y-5">
       {/* Success toast */}
       <AnimatePresence>
@@ -145,6 +164,7 @@ export default function BroadcastPage() {
           </motion.button>
         </div>
       </div>
+    </div>
     </div>
   )
 }

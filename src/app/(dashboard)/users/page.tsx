@@ -56,7 +56,7 @@ function ExportModal() {
     <AnimatePresence>
       {exportOpen && (
         <Dialog open={exportOpen} onOpenChange={setExportOpen}>
-          <DialogContent showCloseButton={false} className="sm:max-w-[540px] rounded-2xl p-0 overflow-hidden gap-0">
+          <DialogContent showCloseButton={false} className="sm:max-w-[540px] rounded-2xl p-0 overflow-hidden gap-0 bg-white dark:bg-[#1C1C22] border dark:border-[#26262E]">
             <motion.div
               initial={{ opacity:0, scale:0.97, y:8 }}
               animate={{ opacity:1, scale:1, y:0 }}
@@ -64,59 +64,61 @@ function ExportModal() {
               transition={{ duration:0.18, ease:[0.33,1,0.68,1] }}
             >
               {/* Header */}
-              <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F3F4F6]">
+              <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F3F4F6] dark:border-[#26262E]">
                 <div>
-                  <h2 className="text-[17px] font-bold text-[#111827]">Export users</h2>
+                  <h2 className="text-[17px] font-bold text-[#111827] dark:text-[#E8E8E8]">Export users</h2>
                   <p className="text-[12.5px] text-[#8FA3A0] mt-0.5">Download a filtered CSV of user records</p>
                 </div>
-                <button onClick={() => setExportOpen(false)}
-                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] flex items-center justify-center text-[#8FA3A0] hover:text-[#374151]">
+                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => setExportOpen(false)}
+                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] flex items-center justify-center text-[#8FA3A0] transition-colors">
                   <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={2} />
-                </button>
+                </motion.button>
               </div>
 
               <div className="px-6 py-5 space-y-5">
                 {/* Scope */}
                 <div>
-                  <p className="text-[12px] font-semibold text-[#374151] mb-3">Export scope</p>
+                  <p className="text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] mb-3">Export scope</p>
                   <div className="grid grid-cols-2 gap-3">
                     {([
                       { id:"all",      title:"All users",        desc:"Export the complete user database with your column selections below", foot:"24,817 users" },
                       { id:"filtered", title:"Current filters",  desc:"Export only users matching your active role, status, and city filters",   foot:"No filters active" },
                     ] as const).map((opt) => (
-                      <button key={opt.id} onClick={() => setExportScope(opt.id)}
+                      <motion.button key={opt.id} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.12 }}
+                        onClick={() => setExportScope(opt.id)}
                         className={cn("flex flex-col gap-1.5 p-4 rounded-xl border text-left transition-all",
                           exportScope === opt.id
-                            ? "border-[#111827] bg-white shadow-sm"
-                            : "border-[#E5E7EB] bg-[#F9FAFB] hover:border-[#D1D5DB]"
+                            ? "border-[#111827] dark:border-[#E8E8E8] bg-white dark:bg-[#26262E] shadow-sm"
+                            : "border-[#E5E7EB] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#141418] hover:border-[#D1D5DB] dark:hover:border-[#404048]"
                         )}>
                         <div className="flex items-center justify-between">
-                          <p className="text-[12.5px] font-bold text-[#111827]">{opt.title}</p>
+                          <p className="text-[12.5px] font-bold text-[#111827] dark:text-[#E8E8E8]">{opt.title}</p>
                           <div className={cn("w-4 h-4 rounded-full border-2 flex items-center justify-center",
-                            exportScope === opt.id ? "border-[#111827]" : "border-[#D1D5DB]"
+                            exportScope === opt.id ? "border-[#111827] dark:border-[#E8E8E8]" : "border-[#D1D5DB] dark:border-[#404048]"
                           )}>
-                            {exportScope === opt.id && <div className="w-2 h-2 rounded-full bg-[#111827]" />}
+                            {exportScope === opt.id && <div className="w-2 h-2 rounded-full bg-[#111827] dark:bg-[#E8E8E8]" />}
                           </div>
                         </div>
                         <p className="text-[11.5px] text-[#8FA3A0] leading-snug">{opt.desc}</p>
-                        <p className="text-[11px] font-semibold text-[#374151] pt-1 border-t border-[#F3F4F6]">{opt.foot}</p>
-                      </button>
+                        <p className="text-[11px] font-semibold text-[#374151] dark:text-[#9BA1A6] pt-1 border-t border-[#F3F4F6] dark:border-[#26262E]">{opt.foot}</p>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
 
                 {/* Filter by */}
                 <div>
-                  <p className="text-[12px] font-semibold text-[#374151] mb-3">Filter by</p>
+                  <p className="text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] mb-3">Filter by</p>
                   <div className="space-y-3">
                     <div>
                       <p className="text-[10px] font-bold text-[#8FA3A0] uppercase tracking-wide mb-2">Role</p>
                       <div className="flex gap-2 flex-wrap">
                         {ROLES.map((r) => (
-                          <button key={r} onClick={() => setExportRole(r)}
+                          <motion.button key={r} whileTap={{ scale: 0.94 }} transition={{ duration: 0.1 }}
+                            onClick={() => setExportRole(r)}
                             className={cn("h-7 px-3 rounded-full text-[11.5px] font-medium border transition-colors",
-                              exportRole === r ? "bg-[#111827] text-white border-[#111827]" : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#D1D5DB]"
-                            )}>{r}</button>
+                              exportRole === r ? "bg-[#111827] dark:bg-[#E8E8E8] text-white dark:text-[#111827] border-[#111827] dark:border-[#E8E8E8]" : "bg-white dark:bg-[#141418] text-[#374151] dark:text-[#9BA1A6] border-[#E5E7EB] dark:border-[#26262E] hover:border-[#D1D5DB]"
+                            )}>{r}</motion.button>
                         ))}
                       </div>
                     </div>
@@ -124,10 +126,11 @@ function ExportModal() {
                       <p className="text-[10px] font-bold text-[#8FA3A0] uppercase tracking-wide mb-2">Status</p>
                       <div className="flex gap-2 flex-wrap">
                         {STATUSES.map((s) => (
-                          <button key={s} onClick={() => setExportStatus(s)}
+                          <motion.button key={s} whileTap={{ scale: 0.94 }} transition={{ duration: 0.1 }}
+                            onClick={() => setExportStatus(s)}
                             className={cn("h-7 px-3 rounded-full text-[11.5px] font-medium border transition-colors",
-                              exportStatus === s ? "bg-[#111827] text-white border-[#111827]" : "bg-white text-[#374151] border-[#E5E7EB] hover:border-[#D1D5DB]"
-                            )}>{s}</button>
+                              exportStatus === s ? "bg-[#111827] dark:bg-[#E8E8E8] text-white dark:text-[#111827] border-[#111827] dark:border-[#E8E8E8]" : "bg-white dark:bg-[#141418] text-[#374151] dark:text-[#9BA1A6] border-[#E5E7EB] dark:border-[#26262E] hover:border-[#D1D5DB]"
+                            )}>{s}</motion.button>
                         ))}
                       </div>
                     </div>
@@ -136,30 +139,33 @@ function ExportModal() {
 
                 {/* Date range */}
                 <div>
-                  <p className="text-[12px] font-semibold text-[#374151] mb-2">Joined date</p>
-                  <div className="flex items-center gap-3 h-9 px-3 rounded-xl border border-[#E5E7EB] bg-[#F9FAFB] text-[12.5px] text-[#374151] cursor-pointer hover:border-[#D1D5DB]">
+                  <p className="text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] mb-2">Joined date</p>
+                  <motion.div whileHover={{ scale: 1.005 }} transition={{ duration: 0.12 }}
+                    className="flex items-center gap-3 h-9 px-3 rounded-xl border border-[#E5E7EB] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#141418] text-[12.5px] text-[#374151] dark:text-[#9BA1A6] cursor-pointer hover:border-[#D1D5DB] dark:hover:border-[#404048] transition-colors">
                     <HugeiconsIcon icon={Calendar01Icon} size={13} strokeWidth={1.5} className="text-[#8FA3A0]" />
                     <span className="font-semibold flex-1">All time</span>
                     <span className="text-[11px] text-[#8FA3A0]">Click to set range</span>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] bg-[#F9FAFB]">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#141418]">
                 <div className="flex items-center gap-3 text-[12px] text-[#8FA3A0]">
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#17B890]" />~3,420 rows</span>
                   <span>~1.2 MB</span>
                   <span>ready in ~8s</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <button onClick={() => setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] text-[12.5px] font-semibold text-[#374151] hover:bg-white bg-[#F9FAFB]">Cancel</button>
-                  <button onClick={() => setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center gap-1.5">
+                  <motion.button whileTap={{ scale: 0.97 }} transition={{ duration: 0.1 }}
+                    onClick={() => setExportOpen(false)}
+                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] dark:border-[#26262E] text-[12.5px] font-semibold text-[#374151] dark:text-[#9BA1A6] hover:bg-white dark:hover:bg-[#26262E] bg-[#F9FAFB] dark:bg-[#141418] transition-colors">Cancel</motion.button>
+                  <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }} transition={{ duration: 0.1 }}
+                    onClick={() => setExportOpen(false)}
+                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] dark:bg-[#17B890] dark:hover:bg-[#15a47d] text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-colors">
                     <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={2} />
                     Generate report
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </motion.div>
@@ -223,7 +229,7 @@ export default function UsersPage() {
   const allSelected = pageData.length > 0 && pageData.every((u) => store.selected.has(u.id))
 
   const STATS = [
-    { label:"TOTAL USERS",       value:"24,817", sub:"↑ +342 today",    valueColor:"#111827", subColor:"#17B890" },
+    { label:"TOTAL USERS",       value:"24,817", sub:"↑ +342 today",    valueColor:"#2563EB", subColor:"#17B890" },
     { label:"TASK DOERS",        value:"18,204", sub:"73.4% of total",  valueColor:"#111827", subColor:"#8FA3A0" },
     { label:"TASK GIVERS",       value:"6,613",  sub:"26.6% of total",  valueColor:"#17B890", subColor:"#8FA3A0" },
     { label:"SUSPENDED / BANNED",value:"83",     sub:"0.33% of total",  valueColor:"#EF4444", subColor:"#8FA3A0" },
@@ -234,24 +240,25 @@ export default function UsersPage() {
       {/* ── KPI strip ── */}
       <motion.div
         initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.25 }}
-        className="flex bg-white border border-[#E5E7EB] rounded-xl overflow-hidden mb-4"
+        className="flex bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl overflow-hidden mb-4"
       >
         {STATS.map((s, i) => (
-          <div key={s.label} className={cn("flex-1 px-6 py-4", i < STATS.length - 1 && "border-r border-[#F3F4F6]")}>
+          <motion.div key={s.label} whileHover={{ backgroundColor: "rgba(23,184,144,0.03)" }} transition={{ duration: 0.15 }}
+            className={cn("flex-1 px-6 py-4", i < STATS.length - 1 && "border-r border-[#F3F4F6] dark:border-[#26262E]")}>
             <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] uppercase mb-1">{s.label}</p>
             <p className="text-[22px] font-extrabold leading-tight" style={{ color: s.valueColor }}>{s.value}</p>
             <p className="text-[11px] font-semibold mt-0.5" style={{ color: s.subColor }}>{s.sub}</p>
-          </div>
+          </motion.div>
         ))}
       </motion.div>
 
       {/* ── Table card ── */}
       <motion.div
         initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.3, delay:0.06 }}
-        className="bg-white border border-[#E5E7EB] rounded-xl overflow-hidden"
+        className="bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl overflow-hidden"
       >
         {/* Toolbar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#F3F4F6] flex-wrap">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E] flex-wrap">
           <div className="relative">
             <HugeiconsIcon icon={Search01Icon} size={13} strokeWidth={1.5}
               className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#8FA3A0] pointer-events-none" />
@@ -279,7 +286,7 @@ export default function UsersPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#F3F4F6] bg-[#F9FAFB]">
+              <tr className="border-b border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#1C1C22]">
                 <th className="pl-4 pr-2 py-2.5 w-8">
                   <input type="checkbox" checked={allSelected}
                     onChange={() => store.toggleSelectAll(pageData.map((u) => u.id))}
@@ -307,8 +314,8 @@ export default function UsersPage() {
                     <motion.tr key={u.id}
                       initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
                       transition={{ duration:0.15, delay: i * 0.02 }}
-                      className={cn("border-b border-[#F9FAFB] transition-colors",
-                        isSelected ? "bg-[#F0FDF4]" : "hover:bg-[#FAFAFA]"
+                      className={cn("border-b border-[#F9FAFB] dark:border-[#26262E] transition-colors",
+                        isSelected ? "bg-[#F0FDF4] dark:bg-[#0A2A22]" : "hover:bg-[#FAFAFA] dark:hover:bg-[#1C1C22]"
                       )}>
                       <td className="pl-4 pr-2 py-3">
                         <input type="checkbox" checked={isSelected}
@@ -317,7 +324,7 @@ export default function UsersPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#17B890] to-[#3B82F6] flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-[#E5E7EB] flex items-center justify-center text-[10px] font-bold text-[#374151] shrink-0">
                             {initials}
                           </div>
                           <div>
@@ -362,7 +369,7 @@ export default function UsersPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-[#F3F4F6]">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-[#F3F4F6] dark:border-[#26262E]">
           <p className="text-[12px] text-[#8FA3A0]">
             Showing <span className="font-semibold text-[#374151]">{(store.page - 1) * store.rowsPerPage + 1}–{Math.min(store.page * store.rowsPerPage, filtered.length)}</span> of{" "}
             <span className="font-semibold text-[#374151]">{filtered.length.toLocaleString()}</span> Users

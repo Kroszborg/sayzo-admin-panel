@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   DashboardSquare01Icon,
@@ -119,6 +120,11 @@ function ModuleCard({ href, icon, label, desc, badge }: {
   badge: number | null
 }) {
   return (
+    <motion.div
+      whileHover={{ y: -3, boxShadow: "0 12px 32px rgba(0,0,0,0.12)" }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.18, ease: [0.33, 1, 0.68, 1] }}
+    >
     <Link
       href={href}
       style={{
@@ -127,7 +133,7 @@ function ModuleCard({ href, icon, label, desc, badge }: {
         borderRadius: "14px",
         borderWidth: "1px",
       }}
-      className="relative bg-white border border-[#E5E7EB] hover:border-[#A8DFD0] hover:shadow-lg transition-all group cursor-pointer flex flex-col p-5 overflow-hidden"
+      className="relative bg-white border border-[#E5E7EB] hover:border-[#A8DFD0] transition-all group cursor-pointer flex flex-col p-5 overflow-hidden"
     >
       {/* Badge — inside top-right corner */}
       {badge !== null && (
@@ -145,6 +151,7 @@ function ModuleCard({ href, icon, label, desc, badge }: {
       <p className="text-[14px] font-bold text-[#111827] mb-1.5">{label}</p>
       <p className="text-[12px] text-[#8FA3A0] leading-relaxed line-clamp-2">{desc}</p>
     </Link>
+    </motion.div>
   )
 }
 

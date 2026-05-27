@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Calendar01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import { Calendar01Icon, ArrowRight01Icon,DashboardSquare01Icon } from "@hugeicons/core-free-icons"
 import { usePageStore } from "@/store/page-store"
 import { cn } from "@/lib/utils"
 
@@ -92,7 +92,8 @@ export function TopBar() {
     <header className="shrink-0 flex items-center justify-between border-b border-[#E5E7EB] dark:border-[#26262E] bg-white dark:bg-[#141418] px-5 h-[53px]">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-1.5" aria-label="Breadcrumb">
-        <Link href="/modules" className="text-[11.5px] text-[#8FA3A0] dark:text-[#6B7280] hover:text-[#374151] dark:hover:text-[#9BA1A6] transition-colors">
+        <Link href="/modules" className="flex items-center gap-1 text-[11.5px] text-[#8FA3A0] dark:text-[#6B7280] hover:text-[#374151] dark:hover:text-[#9BA1A6] transition-colors">
+          <HugeiconsIcon icon={DashboardSquare01Icon} size={12} strokeWidth={1.5} />
           Modules
         </Link>
         {crumbs.map((c, i) => (
@@ -118,7 +119,7 @@ export function TopBar() {
       <div className="flex items-center gap-3">
         {pageActions}
         {now && (
-          <span className="flex items-center gap-1.5 border border-[#E2E8E6] dark:border-[#26262E] rounded-lg px-3 py-1.5 text-[11px] text-[#8FA3A0] dark:text-[#6B7280] bg-white dark:bg-[#1C1C22] whitespace-nowrap">
+          <span className="flex items-center gap-1.5 bg-[#F7F7F7] border border-[#EEEEEE] dark:border-[#26262E] rounded-lg px-3 py-1.5 text-[11px] text-[#6B7280] dark:text-[#6B7280] dark:bg-[#1C1C22] whitespace-nowrap">
             <HugeiconsIcon icon={Calendar01Icon} size={12} strokeWidth={1.5} />
             {now}
           </span>

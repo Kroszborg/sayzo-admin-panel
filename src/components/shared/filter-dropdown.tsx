@@ -58,7 +58,7 @@ export function FilterDropdown({ label, options, value, onChange, width = 160 }:
           "h-8 px-3 rounded-lg border text-[12px] font-medium flex items-center gap-1.5 transition-colors whitespace-nowrap select-none",
           open || isActive
             ? "bg-[#111827] text-white border-[#111827]"
-            : "bg-white text-[#374151] border-[#E2E8E6] hover:bg-[#F5F8F7] hover:border-[#D1D5DB]"
+            : "bg-white dark:bg-[#1C1C22] text-[#374151] dark:text-[#9BA1A6] border-[#E2E8E6] dark:border-[#26262E] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] hover:border-[#D1D5DB] dark:hover:border-[#35353D]"
         )}
       >
         {displayLabel}
@@ -81,7 +81,7 @@ export function FilterDropdown({ label, options, value, onChange, width = 160 }:
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.12, ease: [0.33, 1, 0.68, 1] }}
             className={cn(
-              "absolute z-[9999] bg-white border border-[#E5E7EB] rounded-xl shadow-xl py-1 overflow-hidden",
+              "absolute z-[9999] bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl shadow-xl dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] py-1 overflow-hidden",
               openUp   ? "bottom-full mb-1.5" : "top-full mt-1.5",
               alignRight ? "right-0" : "left-0"
             )}
@@ -96,8 +96,8 @@ export function FilterDropdown({ label, options, value, onChange, width = 160 }:
                 className={cn(
                   "flex items-center justify-between w-full px-3 py-2.5 text-[12px] text-left transition-colors",
                   value === opt
-                    ? "bg-[#F0FDF4] text-[#17B890] font-semibold"
-                    : "text-[#374151] hover:bg-[#F5F8F7] font-medium"
+                    ? "bg-[#F0FDF4] dark:bg-[#0A2A22] text-[#17B890] dark:text-[#2DD4BF] font-semibold"
+                    : "text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] font-medium"
                 )}
               >
                 {opt}

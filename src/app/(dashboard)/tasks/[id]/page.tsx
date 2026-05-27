@@ -45,7 +45,7 @@ function ForceCloseModal({ taskId, title }: { taskId: string; title: string }) {
     <AnimatePresence>
       {s.actionOpen && (
         <Dialog open={s.actionOpen} onOpenChange={s.setActionOpen}>
-          <DialogContent showCloseButton={false} className="sm:max-w-[640px] rounded-2xl p-0 gap-0 overflow-hidden">
+          <DialogContent showCloseButton={false} className="sm:max-w-[640px] rounded-2xl p-0 gap-0 overflow-hidden bg-white dark:bg-[#1C1C22] border dark:border-[#26262E]">
             <motion.div
               initial={{ opacity:0, scale:0.97, y:8 }}
               animate={{ opacity:1, scale:1,    y:0 }}
@@ -53,22 +53,23 @@ function ForceCloseModal({ taskId, title }: { taskId: string; title: string }) {
               transition={{ duration:0.18, ease:[0.33,1,0.68,1] }}
             >
               {/* Header */}
-              <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F3F4F6]">
+              <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F3F4F6] dark:border-[#26262E]">
                 <div>
-                  <h2 className="text-[17px] font-bold text-[#111827]">Force-close this task</h2>
+                  <h2 className="text-[17px] font-bold text-[#111827] dark:text-[#E8E8E8]">Force-close this task</h2>
                   <p className="text-[12px] text-[#8FA3A0] mt-0.5">
                     Acting as Aarav Sharma · Admin on {taskId}. Money in escrow will be redistributed based on your decision below.
                   </p>
                 </div>
-                <button onClick={() => s.setActionOpen(false)}
-                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] flex items-center justify-center text-[#8FA3A0] mt-0.5">
+                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                  onClick={() => s.setActionOpen(false)}
+                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] flex items-center justify-center text-[#8FA3A0] mt-0.5 transition-colors">
                   <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={2} />
-                </button>
+                </motion.button>
               </div>
 
               <div className="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
                 {/* Task summary strip */}
-                <div className="flex items-center gap-3 p-3.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-xl flex-wrap">
+                <div className="flex items-center gap-3 p-3.5 bg-[#F9FAFB] dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl flex-wrap">
                   <div className="flex-1 min-w-0">
                     <p className="text-[12.5px] font-bold text-[#111827] truncate">{title}</p>
                     <p className="text-[11px] text-[#8FA3A0]">{taskId}</p>
@@ -157,9 +158,9 @@ function ForceCloseModal({ taskId, title }: { taskId: string; title: string }) {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] bg-[#F9FAFB]">
-                <button onClick={() => s.setActionOpen(false)}
-                  className="h-9 px-4 rounded-xl border border-[#E5E7EB] text-[12.5px] font-semibold text-[#374151] hover:bg-white bg-[#F9FAFB]">Cancel</button>
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#141418]">
+                <motion.button whileTap={{ scale: 0.97 }} onClick={() => s.setActionOpen(false)}
+                  className="h-9 px-4 rounded-xl border border-[#E5E7EB] dark:border-[#26262E] text-[12.5px] font-semibold text-[#374151] dark:text-[#9BA1A6] hover:bg-white dark:hover:bg-[#26262E] bg-[#F9FAFB] dark:bg-[#141418] transition-colors">Cancel</motion.button>
                 <button
                   onClick={() => {
                     s.setActionOpen(false)

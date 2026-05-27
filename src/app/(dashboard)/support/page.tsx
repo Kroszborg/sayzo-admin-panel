@@ -26,7 +26,7 @@ const TABS: { value: TktStatus | "All"; count: number }[] = [
 const CAT_STYLE: Record<string, string> = {
   Payment:     "bg-[#FEE2E2] text-[#DC2626]",
   Account:     "bg-[#FEF3C7] text-[#D97706]",
-  Dispute:     "bg-[#DBEAFE] text-[#2563EB]",
+  Dispute:     "bg-[#FEF3C7] text-[#D97706]",
   Verification:"bg-[#F3E8FF] text-[#9333EA]",
   Technical:   "bg-[#EEF2FF] text-[#6366F1]",
   Refund:      "bg-[#DCFCE7] text-[#16A34A]",
@@ -290,11 +290,9 @@ export default function SupportPage() {
                           <motion.button whileTap={{ scale: 0.95 }}
                             onClick={() => router.push(`/support/${ticket.id}`)}
                             className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">View</motion.button>
-                          {!ticket.assignedTo && (
-                            <motion.button whileTap={{ scale: 0.95 }}
-                              onClick={() => s.setAssignOpen(true, ticket.id)}
-                              className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">Assign</motion.button>
-                          )}
+                          <motion.button whileTap={{ scale: 0.95 }}
+                            onClick={() => s.setAssignOpen(true, ticket.id)}
+                            className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">Assign</motion.button>
                         </div>
                       </td>
                     </motion.tr>

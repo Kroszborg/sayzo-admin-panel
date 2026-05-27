@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
@@ -55,8 +56,27 @@ export default function LiveSupportPage() {
   }, [])
 
   return (
-    <div className="flex bg-white border border-[#E5E7EB] rounded-xl"
-      style={{ height: "calc(100vh - 230px)", overflow: "clip" }}>
+    <div className="flex flex-col h-full">
+      {/* ── Page header ── */}
+      <div className="flex items-start justify-between mb-5 shrink-0">
+        <div>
+          <h1 className="text-[20px] font-extrabold text-[#111827] dark:text-[#E8E8E8]">Live Support</h1>
+          <p className="text-[12px] text-[#8FA3A0] mt-0.5">Reach your users directly — manage real-time support or send targeted broadcasts across your platform.</p>
+        </div>
+        {/* Live Support | Broadcast tab toggle */}
+        <div className="flex items-center border border-[#E5E7EB] rounded-lg overflow-hidden shrink-0">
+          <Link href="/communications/live-support"
+            className="flex items-center h-8 px-4 text-[12px] font-bold bg-[#111827] text-white">
+            Live Support
+          </Link>
+          <Link href="/communications/broadcast"
+            className="flex items-center h-8 px-4 text-[12px] font-medium text-[#374151] hover:bg-[#F5F8F7] transition-colors">
+            Broadcast
+          </Link>
+        </div>
+      </div>
+
+    <div className="flex bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl flex-1 min-h-0 overflow-clip">
 
       {/* ── Conversation list ── */}
       <div className="w-[300px] shrink-0 border-r border-[#E5E7EB] flex flex-col">
@@ -346,6 +366,7 @@ export default function LiveSupportPage() {
           setResolveOpen(false)
         }}
       />
+    </div>
     </div>
   )
 }

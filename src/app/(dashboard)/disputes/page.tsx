@@ -54,25 +54,26 @@ function AssignModal() {
     <AnimatePresence>
       {s.assignOpen && (
         <Dialog open={s.assignOpen} onOpenChange={(v) => s.setAssignOpen(v)}>
-          <DialogContent showCloseButton={false} className="sm:max-w-sm rounded-2xl p-0 gap-0 overflow-hidden">
+          <DialogContent showCloseButton={false} className="sm:max-w-sm rounded-2xl p-0 gap-0 overflow-hidden bg-white dark:bg-[#1C1C22] border dark:border-[#26262E]">
             <motion.div
               initial={{ opacity:0, scale:0.97, y:8 }}
               animate={{ opacity:1, scale:1, y:0 }}
               exit={{ opacity:0, scale:0.97, y:8 }}
               transition={{ duration:0.18, ease:[0.33,1,0.68,1] }}
             >
-              <div className="px-5 pt-5 pb-3 border-b border-[#F3F4F6]">
+              <div className="px-5 pt-5 pb-3 border-b border-[#F3F4F6] dark:border-[#26262E]">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-[15px] font-bold text-[#111827]">Assign case</h3>
+                    <h3 className="text-[15px] font-bold text-[#111827] dark:text-[#E8E8E8]">Assign case</h3>
                     <p className="text-[11px] text-[#8FA3A0] mt-0.5">
                       Acting as Aarav Sharma · Admin on {s.assignCaseId}
                     </p>
                   </div>
-                  <button onClick={() => s.setAssignOpen(false)}
-                    className="w-6 h-6 rounded flex items-center justify-center text-[#8FA3A0] hover:bg-[#F5F8F7]">
+                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                    onClick={() => s.setAssignOpen(false)}
+                    className="w-6 h-6 rounded flex items-center justify-center text-[#8FA3A0] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] transition-colors">
                     <HugeiconsIcon icon={Cancel01Icon} size={12} strokeWidth={2} />
-                  </button>
+                  </motion.button>
                 </div>
               </div>
 
@@ -83,56 +84,59 @@ function AssignModal() {
                     className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#8FA3A0]" />
                   <input value={s.assignSearch} onChange={(e) => s.setAssignSearch(e.target.value)}
                     placeholder="Search team member by name or role..."
-                    className="w-full h-8 pl-7 pr-3 rounded-lg border border-[#E2E8E6] text-[12px] outline-none focus:border-[#17B890] placeholder:text-[#C8D8D4]" />
+                    className="w-full h-8 pl-7 pr-3 rounded-lg border border-[#E2E8E6] dark:border-[#26262E] bg-white dark:bg-[#141418] text-[12px] text-[#374151] dark:text-[#9BA1A6] outline-none focus:border-[#17B890] placeholder:text-[#C8D8D4] transition-colors" />
                 </div>
 
                 <div className="space-y-1.5 max-h-52 overflow-y-auto">
                   {agents.map((m) => {
                     const isSel = s.selectedResolver === m.id
                     return (
-                      <button key={m.id} onClick={() => s.setResolver(m.id)}
+                      <motion.button key={m.id} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }} transition={{ duration: 0.1 }}
+                        onClick={() => s.setResolver(m.id)}
                         className={cn("w-full flex items-center gap-2.5 p-2.5 rounded-xl border text-left transition-all",
-                          isSel ? "border-[#17B890] bg-[#F0FDF4]" : "border-[#E5E7EB] hover:bg-[#F9FAFB]"
+                          isSel
+                            ? "border-[#17B890] bg-[#F0FDF4] dark:bg-[#0A2A22]"
+                            : "border-[#E5E7EB] dark:border-[#26262E] hover:bg-[#F9FAFB] dark:hover:bg-[#141418]"
                         )}>
                         <div className={cn("w-4 h-4 rounded-full border-2 shrink-0 flex items-center justify-center",
-                          isSel ? "border-[#17B890]" : "border-[#D1D5DB]"
+                          isSel ? "border-[#17B890]" : "border-[#D1D5DB] dark:border-[#404048]"
                         )}>
                           {isSel && <div className="w-2 h-2 rounded-full bg-[#17B890]" />}
                         </div>
-                        <div className="w-8 h-8 rounded-full bg-[#E8F7F3] flex items-center justify-center text-[10px] font-bold text-[#17B890] shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[#E8F7F3] dark:bg-[#0A2A22] flex items-center justify-center text-[10px] font-bold text-[#17B890] shrink-0">
                           {m.name.split(" ").map(n=>n[0]).join("")}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[12px] font-semibold text-[#374151]">{m.name}</p>
+                          <p className="text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6]">{m.name}</p>
                           <p className="text-[10px] text-[#8FA3A0]">{m.role}</p>
                         </div>
                         {m.isOnline && <div className="w-2 h-2 rounded-full bg-[#22C55E] shrink-0" />}
-                      </button>
+                      </motion.button>
                     )
                   })}
                 </div>
 
                 {chosen && (
-                  <p className="text-[11px] text-[#374151]">
-                    Selected: <span className="font-bold">{chosen.name}</span>
+                  <p className="text-[11px] text-[#374151] dark:text-[#9BA1A6]">
+                    <span className="text-[#8FA3A0]">{chosen.name}</span> selected
                   </p>
                 )}
               </div>
 
               <div className="flex gap-2 px-5 pb-5">
-                <button onClick={() => s.setAssignOpen(false)}
-                  className="flex-1 h-8 rounded-lg border border-[#E2E8E6] text-[12px] font-semibold text-[#374151] hover:bg-[#F5F8F7]">Cancel</button>
-                <button
+                <motion.button whileTap={{ scale: 0.97 }} onClick={() => s.setAssignOpen(false)}
+                  className="flex-1 h-9 rounded-xl border border-[#E2E8E6] dark:border-[#26262E] text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] transition-colors">Cancel</motion.button>
+                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                   onClick={() => {
                     const resolver = MOCK_TEAM.find((m) => m.id === s.selectedResolver)
                     s.confirmAssign()
                     alert.show("success", `Case ${s.assignCaseId} assigned to ${resolver?.name ?? "resolver"}`)
                   }}
                   disabled={!s.selectedResolver}
-                  className="flex-1 h-8 rounded-lg bg-[#111827] hover:bg-[#1f2937] text-white text-[12px] font-bold flex items-center justify-center gap-1.5 disabled:opacity-40 transition-colors">
+                  className="flex-1 h-9 rounded-xl bg-[#111827] dark:bg-[#17B890] hover:bg-[#1f2937] dark:hover:bg-[#15a47d] text-white text-[12px] font-bold flex items-center justify-center gap-1.5 disabled:opacity-40 transition-colors">
                   <HugeiconsIcon icon={CheckmarkCircle02Icon} size={13} strokeWidth={2} />
                   Assign
-                </button>
+                </motion.button>
               </div>
             </motion.div>
           </DialogContent>
@@ -170,9 +174,9 @@ export default function DisputesPage() {
     <div>
       {/* Metrics strip */}
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.22 }}
-        className="flex bg-white border border-[#E5E7EB] rounded-xl overflow-hidden mb-4">
+        className="flex bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-xl overflow-hidden mb-4">
         {STATS.map((s2, i) => (
-          <div key={s2.label} className={cn("flex-1 px-6 py-4", i < STATS.length-1 && "border-r border-[#F3F4F6]")}>
+          <div key={s2.label} className={cn("flex-1 px-6 py-4", i < STATS.length-1 && "border-r border-[#F3F4F6] dark:border-[#26262E]")}>
             <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] uppercase mb-1">{s2.label}</p>
             <p className="text-[22px] font-extrabold leading-tight" style={{ color:s2.valueColor }}>{s2.value}</p>
             <p className={cn("text-[11px] font-semibold mt-0.5", s2.sub.startsWith("↓") ? "text-[#17B890]" : "text-[#8FA3A0]")}>{s2.sub}</p>
@@ -182,7 +186,7 @@ export default function DisputesPage() {
 
       {/* Status tabs */}
       <motion.div initial={{ opacity:0, y:4 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.22, delay:0.04 }}
-        className="flex bg-white border border-[#E5E7EB] rounded-t-xl overflow-x-auto">
+        className="flex bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-t-xl overflow-x-auto">
         {TABS.map((t) => {
           const active = s.activeTab === t.value
           return (
@@ -190,11 +194,11 @@ export default function DisputesPage() {
               whileTap={{ scale: 0.97 }}
               onClick={() => s.setActiveTab(t.value)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
-                active ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
+                active ? "border-[#111827] dark:border-[#E8E8E8] text-[#111827] dark:text-[#E8E8E8] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151] dark:hover:text-[#9BA1A6]"
               )}>
               {t.value}
               <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded",
-                active ? "bg-[#111827] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]"
+                active ? "bg-[#111827] dark:bg-[#E8E8E8] text-white dark:text-[#111827]" : "bg-[#F3F4F6] dark:bg-[#26262E] text-[#8FA3A0]"
               )}>{t.count}</span>
             </motion.button>
           )
@@ -308,7 +312,7 @@ export default function DisputesPage() {
                             whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.95 }}
                             onClick={() => router.push(`/disputes/${d.id}`)}
                             className="h-7 px-2.5 rounded-lg border border-[#E2E8E6] text-[11px] font-semibold text-[#374151] hover:bg-[#F5F8F7] transition-colors">
-                            View
+                            View case
                           </motion.button>
                           {!d.assignedTo && !s.assignments[d.id] && (
                             <motion.button

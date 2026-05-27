@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Search01Icon, Download01Icon, Cancel01Icon, Clock01Icon,
-  Calendar01Icon, ArrowRight01Icon,
+  Calendar01Icon, ArrowRight01Icon, CheckmarkCircle02Icon,
+  AlertDiamondIcon, ArrowDataTransferHorizontalIcon, MinusSignCircleIcon,
 } from "@hugeicons/core-free-icons"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { FilterDropdown } from "@/components/shared/filter-dropdown"
@@ -34,14 +35,42 @@ const TAB_BADGE: Partial<Record<TaskStatus | "All", string>> = {
 function StatusCell({ status, nearbyDoers }: { status: TaskStatus; nearbyDoers?: number }) {
   if (status === "Matching") return (
     <div>
-      <span className="text-[11.5px] font-semibold text-[#D97706]">⏱ Matching · 4m left</span>
-      {nearbyDoers && <p className="text-[10px] text-[#8FA3A0] mt-0.5">● {nearbyDoers} doers nearby</p>}
+      <span className="flex items-center gap-1 text-[11.5px] font-semibold text-[#D97706]">
+        <HugeiconsIcon icon={Clock01Icon} size={12} strokeWidth={2} />
+        Matching · 4m left
+      </span>
+      {nearbyDoers && (
+        <p className="flex items-center gap-1 text-[10px] text-[#8FA3A0] mt-0.5">
+          <HugeiconsIcon icon={Clock01Icon} size={10} strokeWidth={1.5} />
+          {nearbyDoers} doers nearby
+        </p>
+      )}
     </div>
   )
-  if (status === "In Progress")  return <span className="text-[11.5px] font-semibold text-[#2563EB]">⚡ In Progress</span>
-  if (status === "Completed")    return <span className="text-[11.5px] font-semibold text-[#17B890]">✓ Completed</span>
-  if (status === "Disputed")     return <span className="text-[11.5px] font-semibold text-[#DC2626]">⚠ Disputed</span>
-  if (status === "Force-Closed") return <span className="text-[11.5px] font-semibold text-[#6B7280]">⊗ Force-Closed</span>
+  if (status === "In Progress") return (
+    <span className="flex items-center gap-1 text-[11.5px] font-semibold text-[#2563EB]">
+      <HugeiconsIcon icon={ArrowDataTransferHorizontalIcon} size={12} strokeWidth={2} />
+      In Progress
+    </span>
+  )
+  if (status === "Completed") return (
+    <span className="flex items-center gap-1 text-[11.5px] font-semibold text-[#17B890]">
+      <HugeiconsIcon icon={CheckmarkCircle02Icon} size={12} strokeWidth={2} />
+      Completed
+    </span>
+  )
+  if (status === "Disputed") return (
+    <span className="flex items-center gap-1 text-[11.5px] font-semibold text-[#DC2626]">
+      <HugeiconsIcon icon={AlertDiamondIcon} size={12} strokeWidth={2} />
+      Disputed
+    </span>
+  )
+  if (status === "Force-Closed") return (
+    <span className="flex items-center gap-1 text-[11.5px] font-semibold text-[#6B7280]">
+      <HugeiconsIcon icon={MinusSignCircleIcon} size={12} strokeWidth={2} />
+      Force-Closed
+    </span>
+  )
   return <span className="text-[11.5px] text-[#374151]">{status}</span>
 }
 
@@ -56,7 +85,7 @@ function ExportModal() {
     <AnimatePresence>
       {s.exportOpen && (
         <Dialog open={s.exportOpen} onOpenChange={s.setExportOpen}>
-          <DialogContent showCloseButton={false} className="sm:max-w-[580px] rounded-2xl p-0 gap-0 overflow-hidden">
+          <DialogContent showCloseButton={false} className="sm:max-w-[580px] rounded-2xl p-0 gap-0 overflow-hidden bg-white dark:bg-[#1C1C22] border dark:border-[#26262E]">
             <motion.div
               initial={{ opacity:0, scale:0.97, y:8 }}
               animate={{ opacity:1, scale:1, y:0 }}
@@ -64,15 +93,15 @@ function ExportModal() {
               transition={{ duration:0.18, ease:[0.33,1,0.68,1] }}
             >
               {/* Header */}
-              <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F3F4F6]">
+              <div className="flex items-start justify-between px-6 pt-6 pb-4 border-b border-[#F3F4F6] dark:border-[#26262E]">
                 <div>
-                  <h2 className="text-[17px] font-bold text-[#111827]">Export tasks</h2>
+                  <h2 className="text-[17px] font-bold text-[#111827] dark:text-[#E8E8E8]">Export tasks</h2>
                   <p className="text-[12.5px] text-[#8FA3A0] mt-0.5">Download a filtered snapshot of task records</p>
                 </div>
-                <button onClick={() => s.setExportOpen(false)}
-                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] flex items-center justify-center text-[#8FA3A0] hover:text-[#374151]">
+                <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={() => s.setExportOpen(false)}
+                  className="w-7 h-7 rounded-lg hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] flex items-center justify-center text-[#8FA3A0] transition-colors">
                   <HugeiconsIcon icon={Cancel01Icon} size={14} strokeWidth={2} />
-                </button>
+                </motion.button>
               </div>
 
               <div className="px-6 py-5 space-y-5">
@@ -141,7 +170,7 @@ function ExportModal() {
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] bg-[#F9FAFB]">
+              <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#141418]">
                 <div className="flex items-center gap-3 text-[12px] text-[#8FA3A0]">
                   <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-[#17B890]" />~3,420 rows</span>
                   <span>~1.2 MB</span><span>ready in ~8s</span>
@@ -149,10 +178,10 @@ function ExportModal() {
                 <div className="flex items-center gap-2">
                   <motion.button whileTap={{ scale: 0.97 }}
                     onClick={() => s.setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] text-[12.5px] font-semibold text-[#374151] hover:bg-white bg-[#F9FAFB] transition-colors">Cancel</motion.button>
+                    className="h-9 px-4 rounded-xl border border-[#E5E7EB] dark:border-[#26262E] text-[12.5px] font-semibold text-[#374151] dark:text-[#9BA1A6] hover:bg-white dark:hover:bg-[#26262E] bg-[#F9FAFB] dark:bg-[#141418] transition-colors">Cancel</motion.button>
                   <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
                     onClick={() => s.setExportOpen(false)}
-                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-colors">
+                    className="h-9 px-4 rounded-xl bg-[#111827] hover:bg-[#1f2937] dark:bg-[#17B890] dark:hover:bg-[#15a47d] text-white text-[12.5px] font-bold flex items-center gap-1.5 transition-colors">
                     <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={2} />Generate report
                   </motion.button>
                 </div>
@@ -194,19 +223,19 @@ export default function TasksPage() {
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.22 }}
         className="flex items-start justify-between mb-5">
         <div>
-          <h1 className="text-[20px] font-extrabold text-[#111827]">Tasks</h1>
+          <h1 className="text-[20px] font-extrabold text-[#111827] dark:text-[#E8E8E8]">Tasks</h1>
           <p className="text-[12px] text-[#8FA3A0] mt-0.5">All tasks across the platform · monitor matching, intervene on disputes, force-close when needed</p>
         </div>
         <motion.button whileHover={{ scale: 1.015 }} whileTap={{ scale: 0.97 }}
           onClick={() => s.setExportOpen(true)}
-          className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] rounded-lg text-[12px] font-semibold text-[#374151] bg-white hover:bg-[#F5F8F7] transition-colors mt-1">
+          className="flex items-center gap-1.5 h-8 px-3 border border-[#E2E8E6] dark:border-[#26262E] rounded-lg text-[12px] font-semibold text-[#374151] dark:text-[#9BA1A6] bg-white dark:bg-[#1C1C22] hover:bg-[#F5F8F7] dark:hover:bg-[#26262E] transition-colors mt-1">
           <HugeiconsIcon icon={Download01Icon} size={13} strokeWidth={1.5} />Export
         </motion.button>
       </motion.div>
 
       {/* ── Status tabs ── */}
       <motion.div initial={{ opacity:0, y:4 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.22, delay:0.04 }}
-        className="flex bg-white border border-[#E5E7EB] rounded-t-xl overflow-x-auto">
+        className="flex bg-white dark:bg-[#141418] border border-[#E5E7EB] dark:border-[#26262E] rounded-t-xl overflow-x-auto">
         {TABS.map((t) => {
           const active = s.activeTab === t.value
           const badgeCls = TAB_BADGE[t.value] ?? (active ? "bg-[#111827] text-white" : "bg-[#F3F4F6] text-[#8FA3A0]")
@@ -214,7 +243,7 @@ export default function TasksPage() {
             <motion.button key={t.value} whileTap={{ scale: 0.97 }}
               onClick={() => s.setActiveTab(t.value)}
               className={cn("flex items-center gap-1.5 px-4 py-3 text-[12.5px] font-medium border-b-2 whitespace-nowrap transition-colors",
-                active ? "border-[#111827] text-[#111827] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151]"
+                active ? "border-[#111827] dark:border-[#E8E8E8] text-[#111827] dark:text-[#E8E8E8] font-bold" : "border-transparent text-[#8FA3A0] hover:text-[#374151] dark:hover:text-[#9BA1A6]"
               )}>
               {t.label}
               <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded", active ? "bg-[#111827] text-white" : badgeCls)}>
@@ -227,9 +256,9 @@ export default function TasksPage() {
 
       {/* ── Table card ── */}
       <motion.div initial={{ opacity:0, y:6 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.28, delay:0.08 }}
-        className="bg-white border-l border-r border-b border-[#E5E7EB] rounded-b-xl overflow-hidden">
+        className="bg-white dark:bg-[#141418] border-l border-r border-b border-[#E5E7EB] dark:border-[#26262E] rounded-b-xl overflow-hidden">
         {/* Toolbar */}
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#F3F4F6] flex-wrap">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-[#F3F4F6] dark:border-[#26262E] flex-wrap">
           <div className="relative">
             <HugeiconsIcon icon={Search01Icon} size={13} strokeWidth={1.5}
               className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#8FA3A0] pointer-events-none" />
@@ -248,7 +277,7 @@ export default function TasksPage() {
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-[#F3F4F6] bg-[#F9FAFB]">
+              <tr className="border-b border-[#F3F4F6] dark:border-[#26262E] bg-[#F9FAFB] dark:bg-[#1C1C22]">
                 <th className="pl-4 pr-2 py-2.5 w-8">
                   <input type="checkbox" checked={allSel}
                     onChange={() => s.toggleSelectAll(pageData.map((t) => t.id))}
@@ -267,8 +296,8 @@ export default function TasksPage() {
                     <motion.tr key={task.id}
                       initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}
                       transition={{ duration:0.14, delay:i * 0.02 }}
-                      className={cn("border-b border-[#F9FAFB] transition-colors cursor-pointer",
-                        isSel ? "bg-[#F0FDF4]" : "hover:bg-[#FAFAFA]"
+                      className={cn("border-b border-[#F9FAFB] dark:border-[#26262E] transition-colors cursor-pointer",
+                        isSel ? "bg-[#F0FDF4] dark:bg-[#0A2A22]" : "hover:bg-[#FAFAFA] dark:hover:bg-[#1C1C22]"
                       )}
                       onClick={() => router.push(`/tasks/${task.id}`)}
                     >
@@ -278,7 +307,7 @@ export default function TasksPage() {
                           className="rounded border-[#D1D5DB] accent-[#17B890] cursor-pointer" />
                       </td>
                       <td className="px-4 py-3">
-                        <p className="text-[12.5px] font-semibold text-[#111827] max-w-[200px] truncate">{task.title}</p>
+                        <p className="text-[12.5px] font-semibold text-[#111827] dark:text-[#E8E8E8] max-w-[200px] truncate">{task.title}</p>
                         <p className="text-[10.5px] text-[#8FA3A0]">{task.id}</p>
                       </td>
                       <td className="px-4 py-3">
@@ -306,9 +335,9 @@ export default function TasksPage() {
         </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-[#F3F4F6]">
+        <div className="flex items-center justify-between px-4 py-3 border-t border-[#F3F4F6] dark:border-[#26262E]">
           <p className="text-[12px] text-[#8FA3A0]">
-            Showing <span className="font-semibold text-[#374151]">{(s.page-1)*s.rowsPerPage+1}–{Math.min(s.page*s.rowsPerPage,filtered.length)}</span> of{" "}
+            Showing <span className="font-semibold text-[#374151] dark:text-[#9BA1A6]">{(s.page-1)*s.rowsPerPage+1}–{Math.min(s.page*s.rowsPerPage,filtered.length)}</span> of{" "}
             <span className="font-semibold text-[#374151]">{filtered.length.toLocaleString()}</span> tasks
           </p>
           <div className="flex items-center gap-1">

@@ -179,6 +179,21 @@
 [data-theme='dark'] .hover\:bg-\[\#F9FAFB\]:hover,
 [data-theme='dark'] .hover\:bg-white:hover { background-color: var(--dm-elevated) !important; }
 
+/* ── Danger / success hover backgrounds ──────────────────────── */
+[data-theme='dark'] .hover\:bg-\[\#FEF2F2\]:hover { background-color: var(--dm-danger-bg) !important; }
+[data-theme='dark'] .hover\:bg-\[\#F0FDF4\]:hover { background-color: var(--dm-success-bg) !important; }
+
+/* ── Hover text — keep icons/text bright in dark mode ────────── */
+[data-theme='dark'] .hover\:text-\[\#374151\]:hover { color: var(--dm-text-1) !important; }
+[data-theme='dark'] .hover\:text-\[\#111827\]:hover { color: var(--dm-text-1) !important; }
+
+/* ── Hover border overrides ──────────────────────────────────── */
+[data-theme='dark'] .hover\:border-\[\#D1D5DB\]:hover { border-color: var(--dm-border-2) !important; }
+[data-theme='dark'] .hover\:border-\[\#A8DFD0\]:hover { border-color: #1A4035 !important; }
+
+/* ── Group hover — modules page card icons ───────────────────── */
+[data-theme='dark'] .group:hover .group-hover\:bg-\[\#1f2937\] { background-color: #D0D0D0 !important; }
+
 /* ── Dark button backgrounds — keep as is ────────────────────── */
 [data-theme='dark'] .bg-\[\#111827\] { background-color: #E8E8E8 !important; color: #111827 !important; }
 [data-theme='dark'] .hover\:bg-\[\#1f2937\]:hover { background-color: #D0D0D0 !important; }
@@ -426,6 +441,36 @@
 [data-theme='dark'] .border-\[\#111827\].text-\[\#111827\] { border-color: var(--dm-border) !important; color: var(--dm-text-1) !important; }
 /* Selected/active filter pill */
 [data-theme='dark'] .bg-\[\#111827\].text-white { background-color: #E8E8E8 !important; color: #111827 !important; }
+
+/* ── Dark mode — extra patterns ───────────────────────────────── */
+/* User Details KPI icon backgrounds */
+[data-theme='dark'] .text-\[\#DC2626\] { color: #F87171 !important; }
+/* SVG circle ring track */
+[data-theme='dark'] circle[stroke="\#F3F4F6"] { stroke: var(--dm-border) !important; }
+/* Hover bg for tab trigger rows */
+[data-theme='dark'] .hover\:bg-\[\#F0FDF4\]:hover { background-color: var(--dm-success-bg) !important; }
+/* Live Support active conv left border (keep green) */
+[data-theme='dark'] .border-l-\[\#17B890\] { border-color: #17B890 !important; }
+/* Disabled button */
+[data-theme='dark'] .bg-\[\#D1D5DB\].cursor-not-allowed { background-color: var(--dm-elevated) !important; }
+/* Broadcast audience card hover border */
+[data-theme='dark'] .hover\:border-\[\#A8DFD0\]:hover { border-color: #1A4035 !important; }
+/* Recharts area fill (chart sparklines) */
+[data-theme='dark'] .recharts-cartesian-grid line { stroke: var(--dm-border) !important; }
+/* text-[#22C55E] online dots — keep green */
+[data-theme='dark'] .text-\[\#22C55E\] { color: #4ADE80 !important; }
+[data-theme='dark'] .bg-\[\#22C55E\] { background-color: #15803D !important; }
+/* Invite page phone prefix */
+[data-theme='dark'] .bg-\[\#F9FAFB\].border-\[\#E2E8E6\] { background-color: var(--dm-elevated) !important; }
+/* Active tab border-b-2 (tabs underline) */
+[data-theme='dark'] .border-b-2.border-\[\#111827\] { border-bottom-color: var(--dm-text-1) !important; }
+/* Active tab text when underlined */
+[data-theme='dark'] .border-\[\#17B890\].text-\[\#17B890\] { color: #2DD4BF !important; border-color: #2DD4BF !important; }
+/* Dispute/support details left border accents */
+[data-theme='dark'] .border-l-\[\#EF4444\] { border-color: #EF4444 !important; }
+[data-theme='dark'] .border-l-\[\#F59E0B\] { border-color: #F59E0B !important; }
+[data-theme='dark'] .border-l-\[\#17B890\] { border-color: #2DD4BF !important; }
+[data-theme='dark'] .border-l-2.border-l-\[\#17B890\] { border-left-color: #2DD4BF !important; }
 
 @layer base {
   * {

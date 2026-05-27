@@ -32,11 +32,11 @@ const STATUS_STYLE: Record<string, { dot: string; color: string }> = {
 
 // ─── KPI strip data ─────────────────────────────────────────────────────────
 
-const KPI = [
+const KPI: { label:string; value:string; sub:string; valueColor:string; subAlert?:boolean }[] = [
   { label:"Total in Escrow",  value:"₹4,28,400", sub:"247 active tasks",             valueColor:"#D97706" },
   { label:"Released Today",   value:"₹1,12,600", sub:"↑ 34 payouts · auto-released", valueColor:"#17B890" },
   { label:"Disputed",         value:"₹2,38,200", sub:"8 active disputes",             valueColor:"#DC2626" },
-  { label:"Failed / Stuck",   value:"₹14,200",   sub:"3 need attention",              valueColor:"#EF4444" },
+  { label:"Failed / Stuck",   value:"₹14,200",   sub:"3 need attention",              valueColor:"#111827", subAlert:true },
 ]
 
 // ─── Page ───────────────────────────────────────────────────────────────────
@@ -68,7 +68,9 @@ export default function PaymentsPage() {
           <div key={k.label} className={cn("flex-1 px-6 py-4", i < KPI.length-1 && "border-r border-[#F3F4F6]")}>
             <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] uppercase mb-1">{k.label}</p>
             <p className="text-[22px] font-extrabold leading-tight" style={{ color:k.valueColor }}>{k.value}</p>
-            <p className={cn("text-[11px] font-semibold mt-0.5", k.sub.startsWith("↑") ? "text-[#17B890]" : "text-[#8FA3A0]")}>{k.sub}</p>
+            <p className={cn("text-[11px] font-semibold mt-0.5",
+              k.subAlert ? "text-[#EF4444]" : k.sub.startsWith("↑") ? "text-[#17B890]" : "text-[#8FA3A0]"
+            )}>{k.sub}</p>
           </div>
         ))}
       </motion.div>
