@@ -2,7 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark *, [data-theme='dark'] *));
 
 @theme inline {
   --color-brand: var(--brand);
@@ -400,6 +400,32 @@
 
 /* ── Module Home page ────────────────────────────────────────── */
 /* Keep cloud background on modules/auth pages as-is — they look fine */
+
+/* ── Additional missing patterns ─────────────────────────────── */
+[data-theme='dark'] .bg-\[\#E0E7FF\] { background-color: #1A1240 !important; }
+[data-theme='dark'] .bg-\[\#D1D5DB\] { background-color: var(--dm-elevated) !important; }
+[data-theme='dark'] .bg-\[\#E5E7EB\] { background-color: var(--dm-elevated) !important; }
+[data-theme='dark'] .bg-\[\#F5F8F7\] { background-color: var(--dm-base) !important; }
+[data-theme='dark'] .border-\[\#374151\] { border-color: var(--dm-border) !important; }
+[data-theme='dark'] .border-\[\#111827\] { border-color: var(--dm-border) !important; }
+[data-theme='dark'] .border-\[\#FED7AA\] { border-color: #4A2510 !important; }
+[data-theme='dark'] .text-\[\#4F46E5\] { color: #818CF8 !important; }
+[data-theme='dark'] .text-\[\#2563EB\] { color: #60A5FA !important; }
+[data-theme='dark'] .text-\[\#EA580C\] { color: #FB923C !important; }
+[data-theme='dark'] .bg-\[\#2563EB\] { background-color: #1D4ED8 !important; }
+[data-theme='dark'] .bg-\[\#9333EA\] { background-color: #7E22CE !important; }
+[data-theme='dark'] .text-\[\#9333EA\] { color: #C084FC !important; }
+[data-theme='dark'] .text-\[\#C8D8D4\] { color: var(--dm-text-2) !important; }
+/* Table / data row alternates */
+[data-theme='dark'] .even\:bg-\[\#F9FAFB\]:nth-child(even),
+[data-theme='dark'] .odd\:bg-white:nth-child(odd) { background-color: var(--dm-surface) !important; }
+/* Sticky headers in dark tables */
+[data-theme='dark'] th { background-color: var(--dm-elevated) !important; color: var(--dm-text-2) !important; border-color: var(--dm-border) !important; }
+[data-theme='dark'] td { border-color: var(--dm-border-2) !important; color: var(--dm-text-1) !important; }
+/* Badges with border-[#111827] (dark badge in light mode) */
+[data-theme='dark'] .border-\[\#111827\].text-\[\#111827\] { border-color: var(--dm-border) !important; color: var(--dm-text-1) !important; }
+/* Selected/active filter pill */
+[data-theme='dark'] .bg-\[\#111827\].text-white { background-color: #E8E8E8 !important; color: #111827 !important; }
 
 @layer base {
   * {

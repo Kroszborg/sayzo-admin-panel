@@ -64,22 +64,22 @@ export function AppSidebar() {
   }
 
   return (
-    <nav className="flex flex-col w-[220px] shrink-0 bg-white border-r border-[#E5E7EB] h-screen overflow-hidden">
+    <nav className="flex flex-col w-[220px] shrink-0 bg-white dark:bg-[#141418] border-r border-[#E5E7EB] dark:border-[#26262E] h-screen overflow-hidden">
       {/* ── Logo ── */}
-      <div className="flex items-center gap-2.5 px-4 h-[53px] border-b border-[#E5E7EB] shrink-0">
-        <div className="w-8 h-8 rounded-lg bg-[#111827] flex items-center justify-center shrink-0">
-          <AsteriskIcon className="w-[15px] h-[15px] text-white" />
+      <div className="flex items-center gap-2.5 px-4 h-[53px] border-b border-[#E5E7EB] dark:border-[#26262E] shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-[#111827] dark:bg-[#E8E8E8] flex items-center justify-center shrink-0">
+          <AsteriskIcon className="w-[15px] h-[15px] text-white dark:text-[#111827]" />
         </div>
         <div>
-          <p className="text-[13px] font-extrabold text-[#111827] leading-tight">SAYZO</p>
-          <p className="text-[9.5px] font-bold text-[#8FA3A0] leading-tight tracking-widest uppercase">Admin Panel</p>
+          <p className="text-[13px] font-extrabold text-[#111827] dark:text-[#E8E8E8] leading-tight">SAYZO</p>
+          <p className="text-[9.5px] font-bold text-[#8FA3A0] dark:text-[#6B7280] leading-tight tracking-widest uppercase">Admin Panel</p>
         </div>
       </div>
 
       {/* ── Nav items ── */}
       <div className="flex-1 overflow-y-auto px-3 py-3">
         {/* WORKSPACE */}
-        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] uppercase px-2 mb-2">Workspace</p>
+        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] dark:text-[#6B7280] uppercase px-2 mb-2">Workspace</p>
         <ul className="space-y-0.5 mb-4">
           {WORKSPACE.map((item) => {
             const on = active(item.href)
@@ -90,15 +90,15 @@ export function AppSidebar() {
                   className={cn(
                     "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
                     on
-                      ? "bg-[#E8F7F3] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8]"
-                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827]"
+                      ? "bg-[#E8F7F3] dark:bg-[#0A2A22] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8] dark:shadow-[inset_0_0_0_1px_#1A4035]"
+                      : "text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] hover:text-[#111827] dark:hover:text-[#E8E8E8]"
                   )}
                 >
                   <HugeiconsIcon
                     icon={item.icon}
                     size={16}
                     strokeWidth={on ? 2 : 1.5}
-                    className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0 group-hover:text-[#374151]"}
+                    className={on ? "text-[#17B890] shrink-0" : "text-[#6B7280] shrink-0 dark:text-[#6B7280]"}
                   />
                   <span className="flex-1 leading-tight">{item.label}</span>
                   {on && <span className="w-1 h-1 rounded-full bg-[#17B890] shrink-0" />}
@@ -109,7 +109,7 @@ export function AppSidebar() {
         </ul>
 
         {/* PLATFORM */}
-        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] uppercase px-2 mb-2">Platform</p>
+        <p className="text-[9px] font-black tracking-[0.18em] text-[#8FA3A0] dark:text-[#6B7280] uppercase px-2 mb-2">Platform</p>
         <ul className="space-y-0.5">
           {PLATFORM.map((item) => {
             const on = active(item.href)
@@ -120,8 +120,8 @@ export function AppSidebar() {
                   className={cn(
                     "flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg text-[12.5px] font-medium transition-all duration-150",
                     on
-                      ? "bg-[#E8F7F3] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8]"
-                      : "text-[#374151] hover:bg-[#F5F8F7] hover:text-[#111827]"
+                      ? "bg-[#E8F7F3] dark:bg-[#0A2A22] text-[#17B890] font-semibold shadow-[inset_0_0_0_1px_#D1F0E8] dark:shadow-[inset_0_0_0_1px_#1A4035]"
+                      : "text-[#374151] dark:text-[#9BA1A6] hover:bg-[#F5F8F7] dark:hover:bg-[#1C1C22] hover:text-[#111827] dark:hover:text-[#E8E8E8]"
                   )}
                 >
                   <HugeiconsIcon
@@ -140,7 +140,7 @@ export function AppSidebar() {
       </div>
 
       {/* ── Theme toggle + User profile ── */}
-      <div className="border-t border-[#E5E7EB] px-3 pt-2.5 pb-3 shrink-0 space-y-1">
+      <div className="border-t border-[#E5E7EB] dark:border-[#26262E] px-3 pt-2.5 pb-3 shrink-0 space-y-1">
         {/* Dark / Light toggle */}
         <motion.button
           whileHover={{ backgroundColor: theme === "dark" ? "#1C1C22" : "#F5F8F7" }}
@@ -169,7 +169,7 @@ export function AppSidebar() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            <span className="text-[12px] font-medium text-[#374151]">
+            <span className="text-[12px] font-medium text-[#374151] dark:text-[#9BA1A6]">
               {theme === "dark" ? "Light mode" : "Dark mode"}
             </span>
           </div>

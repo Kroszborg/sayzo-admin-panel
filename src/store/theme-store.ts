@@ -9,6 +9,11 @@ interface ThemeStore {
   setTheme:    (t: Theme) => void
 }
 
+function applyTheme(t: Theme) {
+  document.documentElement.setAttribute("data-theme", t)
+  document.documentElement.classList.toggle("dark", t === "dark")
+}
+
 export const useThemeStore = create<ThemeStore>()(
   persist(
     (set, get) => ({
@@ -17,20 +22,19 @@ export const useThemeStore = create<ThemeStore>()(
       toggleTheme: () => {
         const next = get().theme === "light" ? "dark" : "light"
         set({ theme: next })
-        document.documentElement.setAttribute("data-theme", next)
+        applyTheme(next)
       },
 
       setTheme: (t) => {
         set({ theme: t })
-        document.documentElement.setAttribute("data-theme", t)
+        applyTheme(t)
       },
     }),
     {
       name:    "sayzo-theme",
-      // On rehydration, apply the stored theme to the DOM
       onRehydrateStorage: () => (state) => {
         if (state && typeof window !== "undefined") {
-          document.documentElement.setAttribute("data-theme", state.theme)
+          applyTheme(state.theme)
         }
       },
     }

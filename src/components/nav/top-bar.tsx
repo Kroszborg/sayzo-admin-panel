@@ -89,23 +89,23 @@ export function TopBar() {
   const crumbs = buildCrumbs(pathname)
 
   return (
-    <header className="shrink-0 flex items-center justify-between border-b border-[#E5E7EB] bg-white px-5 h-[53px]">
+    <header className="shrink-0 flex items-center justify-between border-b border-[#E5E7EB] dark:border-[#26262E] bg-white dark:bg-[#141418] px-5 h-[53px]">
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-1.5" aria-label="Breadcrumb">
-        <Link href="/modules" className="text-[11.5px] text-[#8FA3A0] hover:text-[#374151] transition-colors">
+        <Link href="/modules" className="text-[11.5px] text-[#8FA3A0] dark:text-[#6B7280] hover:text-[#374151] dark:hover:text-[#9BA1A6] transition-colors">
           Modules
         </Link>
         {crumbs.map((c, i) => (
           <span key={i} className="flex items-center gap-1.5">
-            <HugeiconsIcon icon={ArrowRight01Icon} size={10} strokeWidth={2} className="text-[#D1D5DB]" />
+            <HugeiconsIcon icon={ArrowRight01Icon} size={10} strokeWidth={2} className="text-[#D1D5DB] dark:text-[#26262E]" />
             {c.href ? (
-              <Link href={c.href} className="text-[11.5px] text-[#8FA3A0] hover:text-[#374151] transition-colors">
+              <Link href={c.href} className="text-[11.5px] text-[#8FA3A0] dark:text-[#6B7280] hover:text-[#374151] dark:hover:text-[#9BA1A6] transition-colors">
                 {c.label}
               </Link>
             ) : (
               <span className={cn(
                 "text-[11.5px]",
-                i === crumbs.length - 1 ? "font-semibold text-[#1A2421]" : "text-[#8FA3A0]"
+                i === crumbs.length - 1 ? "font-semibold text-[#1A2421] dark:text-[#E8E8E8]" : "text-[#8FA3A0] dark:text-[#6B7280]"
               )}>
                 {c.label}
               </span>
@@ -118,7 +118,7 @@ export function TopBar() {
       <div className="flex items-center gap-3">
         {pageActions}
         {now && (
-          <span className="flex items-center gap-1.5 border border-[#E2E8E6] rounded-lg px-3 py-1.5 text-[11px] text-[#8FA3A0] bg-white whitespace-nowrap">
+          <span className="flex items-center gap-1.5 border border-[#E2E8E6] dark:border-[#26262E] rounded-lg px-3 py-1.5 text-[11px] text-[#8FA3A0] dark:text-[#6B7280] bg-white dark:bg-[#1C1C22] whitespace-nowrap">
             <HugeiconsIcon icon={Calendar01Icon} size={12} strokeWidth={1.5} />
             {now}
           </span>

@@ -20,17 +20,17 @@ export function PageHeader({ breadcrumbs, greeting, actions }: PageHeaderProps) 
   return (
     <div className="flex items-start justify-between mb-6">
       <div>
-        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-1.5">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-[#6B7280] mb-1.5">
           <span>Modules</span>
           {breadcrumbs.map((b, i) => (
             <span key={i} className="flex items-center gap-1.5">
               <span>/</span>
-              <span className={i === breadcrumbs.length - 1 ? "text-gray-700 font-medium" : ""}>{b}</span>
+              <span className={i === breadcrumbs.length - 1 ? "text-gray-700 dark:text-[#E8E8E8] font-medium" : ""}>{b}</span>
             </span>
           ))}
         </div>
         {greeting && (
-          <h1 className="text-xl font-bold text-gray-900">{greeting}</h1>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-[#E8E8E8]">{greeting}</h1>
         )}
       </div>
       <div className="flex items-center gap-2">
